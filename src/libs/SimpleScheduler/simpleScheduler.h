@@ -1,14 +1,9 @@
-/*****************************************************
- * FILE NAME: staticCircularBuffer.h                  *
- *                                                    *
- * PURPOSE: Declaración de funciones públicas para    *
- *          crear y operar un Scheduler               *
- *                                                    *
- * AUTHOR: Fernando Domínguez                         *
- *                                                    *
- * DATE: 11/12/2015     VERSION: 1.0                  *
- *                                                    *
- *****************************************************/
+/**
+ * @file    simpleScheduler.h
+ * @brief   Header de un pequeño y sencillo scheduler para la gestión de tareas
+ * @author  F. Domínguez
+ * @date    11/12/2015 
+*/
 
 #ifndef SIMPLESCHEDULER_H_
 #define SIMPLESCHEDULER_H_
@@ -26,7 +21,17 @@
 /*****************************************************
  *              TYPEDEFS AND STRUCTURES               *
  *****************************************************/
-
+/**
+ * @struct     STASK
+ * @brief      Estructura con las propiedades que posee una tarea
+ * @par        Descripción:
+ *             - Callback a que realizar
+ *             - Delay
+ *             - Periodo
+ *             - Booleano que indica si se ha de ejecutar o no
+ * @author     F. Domínguez
+ * @date       27/02/2016 
+*/
 typedef struct {
 	void (*pFunction)(void);
 	int Delay;

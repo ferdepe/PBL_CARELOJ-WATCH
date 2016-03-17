@@ -1,14 +1,9 @@
-/*****************************************************
- * FILE NAME: MotorME.c                               *
- *                                                    *
- * PURPOSE: Conjunto de funciones para manejar        *
- *          un scheduler.                             *
- *                                                    *
- * AUTHOR: Fernando Domínguez                         *
- *                                                    *
- * DATE: 11/12/2015     VERSION: 1.0                  *
- *                                                    *
- *****************************************************/
+/**
+ * @file    simpleScheduler.c
+ * @brief   Funciones que implementan un pequeño y sencillo scheduler para la gestión de tareas.
+ * @author  F. Domínguez
+ * @date    11/12/2015 
+*/
 
 /*****************************************************
  *                   MODULES USED                     *
@@ -45,6 +40,13 @@ static unsigned long sysTick;
 /*****************************************************
  *                EXPORTED FUNCTIONS                  *
  *****************************************************/
+/**
+ * @fn         void SIMPLE_SCHEDULER_init()
+ * @brief      Inicialización del scheduler
+ * @author     F. Domínguez
+ * @date       11/12/2015
+ * @version    1.0
+*/
 
 void SIMPLE_SCHEDULER_init() {
 	int i = 0;
@@ -56,6 +58,16 @@ void SIMPLE_SCHEDULER_init() {
 	}
 }
 
+/**
+ * @fn         void SIMPLE_SCHEDULER_addTask(void (*pFunction)(void), int period, int delay)
+ * @brief      Función para crear una tarea
+ * @param[in]  void (*pFunction)(void)
+ * @param[in]  int period
+ * @param[in]  int delay
+ * @author     F. Domínguez
+ * @date       11/12/2015
+ * @version    1.0
+*/
 void SIMPLE_SCHEDULER_addTask(void (*pFunction)(void), int period, int delay) {
 	unsigned char Index = 0;
 
@@ -68,7 +80,13 @@ void SIMPLE_SCHEDULER_addTask(void (*pFunction)(void), int period, int delay) {
 	tasks[Index].Period = period;
 	tasks[Index].RunMe = 0;
 }
-
+/**
+ * @fn         void SIMPLE_SCHEDULER_schedule()
+ * @brief      Función que pone en marcha el scheduler
+ * @author     F. Domínguez
+ * @date       11/12/2015
+ * @version    1.0
+*/
 void SIMPLE_SCHEDULER_schedule() {
 	unsigned char Index;
 
@@ -84,7 +102,13 @@ void SIMPLE_SCHEDULER_schedule() {
 		}
 	}
 }
-
+/**
+ * @fn         void SIMPLE_SCHEDULER_update()
+ * @brief      Función que comprueba las tareas a ejecutar periodicamente
+ * @author     F. Domínguez
+ * @date       11/12/2015
+ * @version    1.0
+*/
 void SIMPLE_SCHEDULER_update() {
 	int i = 0;
 	for (i = 0; i < SCHEDULE_TASK_MAX; i++) {
@@ -109,7 +133,13 @@ void SIMPLE_SCHEDULER_update() {
 /*****************************************************
  *                  LOCAL FUNCTIONS                   *
  *****************************************************/
-
+/**
+ * @fn         static void SIMPLE_SCHEDULER_deleteTask(int i)
+ * @brief      Función que borra las tareas
+ * @author     F. Domínguez
+ * @date       11/12/2015
+ * @version    1.0
+*/
 static void SIMPLE_SCHEDULER_deleteTask(int i) {
 	tasks[i].Delay = 0;
 	tasks[i].Period = 0;
