@@ -17,6 +17,7 @@
 *****************************************************/
 
 #include "tareaEnvio.h"
+#include "funcionesEnvio.h"
 #include "dataManagement.h"
 #include "config.h"
 
@@ -70,11 +71,13 @@ void APP_TAREAENVIO_ejecutaTarea(void){
 	isData = APP_DATAMANAGEMENT_readFromBuffer(&DATAMANAGEMENT_envioDatos, bufferDatosSensores);
 	if (isData){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR INTERNET
+		APP_FUNCIONESENVIO_send("Datos de Sensor",bufferDatosSensores);
 	}
 
 	isData = APP_DATAMANAGEMENT_readFromBuffer(&DATAMANAGEMENT_envioEmergencia, bufferDatosEmergencia);
 	if (isData){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR GPRS
+		APP_FUNCIONESENVIO_send("Datos de Emergencia",bufferDatosEmergencia);
 	}
 }
 
