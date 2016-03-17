@@ -24,30 +24,21 @@
 
 int main()
 {
-	int count;
-	int count_ant;
-	int on = 1;
-
+    int pinActual;
 	APP_DATAMANAGEMENT_initBuffers();
 
 	HAL_TIMER_initTimer(100);
 
-
 	while(1){
-		//APP_TAREALOGICA_ejecutaTarea();
-		//APP_TAREAENVIO_ejecutaTarea();
-		count = HAL_TIMER_getTimerCount();
-		if (count - count_ant >= 100){
-			if (on = 1){
-				HAL_AXI_GPIO_writeAxiLedPin(3,on);
-				on = 0;
-			}
-			else{
-				HAL_AXI_GPIO_writeAxiLedPin(3,on);
-				on = 0;
-			}
-			count_ant = count;
-		}
+		APP_TAREALOGICA_ejecutaTarea();
+		APP_TAREAENVIO_ejecutaTarea();
+		/*
+		pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
+		HAL_AXI_GPIO_writeAxiLedPin(0,pinActual);
+		pinActual = HAL_AXI_GPIO_readAxiButtonPin(2);
+		HAL_AXI_GPIO_writeAxiLedPin(2,pinActual);
+	    */
 	}
+
     return 0;
 }

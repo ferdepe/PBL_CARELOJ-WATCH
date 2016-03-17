@@ -47,7 +47,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_avisoEnBuffer();
 
 /***                LÓGICA ACCIONES               ***/
 void APP_FUNCIONESLOGICA_A_displayPantalla(unsigned int nId);
-unsigned char APP_FUNCIONESLOGICA_A_setContador(unsigned char cont, unsigned char nOperacion);
+void APP_FUNCIONESLOGICA_A_setContador(unsigned int *cont, unsigned char nOperacion);
 /***                 LÓGICA ENTRY                 ***/
 void APP_FUNCIONESLOGICA_ENT_getTimerCount();
 

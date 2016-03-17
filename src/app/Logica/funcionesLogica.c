@@ -7,7 +7,9 @@
  * @author  F. Domínguez
  * @date    04/03/2015
  * @version 1.0
- * @todo
+ * @todo    Función entry del getTimerCount
+ * @todo    Cambiar pines entre Acelerómetro y botón Recogida datos
+ * @todo    Contador timer a 2 segundos, cambiarlo a 10 como en esquema
  */
 
 /*****************************************************
@@ -55,7 +57,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readAcelerometer(){
 	unsigned int pinActual;
 	BOOLEAN ret;
 
-	pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
+	pinActual = HAL_AXI_GPIO_readAxiButtonPin(2);
 
 	if(pinActual && !pinAnterior)
 		ret = 1;
@@ -86,7 +88,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readBlackButton(){
 	unsigned int pinActual;
 	BOOLEAN ret;
 
-	pinActual = HAL_AXI_GPIO_readAxiButtonPin(2);
+	pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
 
 	if(pinActual && !pinAnterior)
 		ret = 1;
@@ -114,10 +116,10 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readGreenButton(){
 
 
 BOOLEAN APP_FUNCIONESLOGICA_E_after10s(){
-	static int cont = 0;
+	unsigned int cont = 0;
 
 	cont = HAL_TIMER_getTimerCount();
-	if ((cont + contadorTimer) >= 1000)
+	if ((cont - contadorTimer) >= 20)
 		return 1;
 	else
 		return 0;
@@ -136,22 +138,24 @@ void APP_FUNCIONESLOGICA_A_displayPantalla(unsigned int nId){
 	 * Insertar función displayPantalla con ID
 	 */
 }
-unsigned char APP_FUNCIONESLOGICA_A_setContador(unsigned char cont, unsigned char nOperacion){
+void APP_FUNCIONESLOGICA_A_setContador(unsigned int *cont, unsigned char nOperacion){
+	int operador = *cont;
+
 	switch(nOperacion){
 	case RESET :
-		cont = 0;
+		operador = 0;
 		break;
 	case SUMA :
-		cont = (cont%NUMBER_SENSORS) +1;
+		operador = (operador+1) % (NUMBER_SENSORS+1);
 		break;
 	case RESTA :
-		if(cont > 0)
-		cont = cont - 1;
+		if(*cont > 0)
+		operador = operador - 1;
 		break;
 
 	}
 
-	return cont;
+	*cont = operador;
 }
 
 /***                 LÓGICA ENTRY                 ***/
@@ -166,17 +170,24 @@ void APP_FUNCIONESLOGICA_DO_protocoloEmergencia(){
 	 * INSERTAR AQUÍ FUNCIÓN QUE LLAMA A RECOGER DATOS EMERGENCIA
 	 */
 
+	unsigned int len = 0;
 	static unsigned char str[] = "7121238ID_20g30m40sN_10g30m21sO_100b$";
 
-	avisoEnBuffer = APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioEmergencia, str, 37);
+	len = sizeof(str);
+
+	avisoEnBuffer = APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioEmergencia, str, len);
 }
 void APP_FUNCIONESLOGICA_DO_getData(){
 	/*
 	 * INSERTAR AQUÍ FUNCIÓN DE REGOGIDA DE DATOS
 	 */
+
+	unsigned int len;
 	static unsigned char str[] = "7121238ID_pl100b_ps75kg$";
 
-	APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioDatos, str, 24);
+	len = sizeof(str);
+
+	APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioDatos, str, len);
 
 	endGetData = 1;
 }

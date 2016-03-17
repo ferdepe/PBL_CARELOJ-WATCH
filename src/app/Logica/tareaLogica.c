@@ -11,6 +11,7 @@
  * @date    19/02/2015
  * @version 1.0
  * @todo aplicar entry a la máquina de estados
+ * @todo platform.h como simulación
  */
 
 /*****************************************************
@@ -20,6 +21,9 @@
 #include "tareaLogica.h"
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
+//Simulación
+#include "platform.h"
+#include <stdio.h>
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
@@ -39,8 +43,8 @@ ESTADO(mostrando_datos)
 	ITEM_EAC(IDLE, E_after10secs, A_displayReloj),
 	ITEM_EAC(RECOGIENDO_DATOS, E_BotonRecogidaPulsado, A_displayGet),
 	ITEM_EAC(MOSTRANDO_DATOS, E_BotonDisplayPulsado, A_displayData),
-	ITEM_EAC(EMERGENCIA, E_UsuarioSeCae, NULL),
-	ITEM_EAC(EMERGENCIA, E_BotonEmergenciaPulsado, NULL)
+	ITEM_EAC(EMERGENCIA, E_UsuarioSeCae, A_resetContador),
+	ITEM_EAC(EMERGENCIA, E_BotonEmergenciaPulsado, A_resetContador)
 FIN_ESTADO(mostrando_datos,MOSTRANDO_DATOS,ESTADO_mostrando_datos_do)
 
 ESTADO(recogiendo_datos)
@@ -71,7 +75,8 @@ FIN_AUTOMATA(careloj, 1, E_nulo)
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
 *****************************************************/
-static unsigned char contPantallaMedida=0;
+static unsigned int contPantallaMedida = 0;
+
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
@@ -221,10 +226,12 @@ BOOLEAN E_nulo(void){
 
 void A_displayData(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
-	APP_FUNCIONESLOGICA_A_setContador(contPantallaMedida, SUMA);
+	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, SUMA);
+	printf("Pantalla: %i \n\r", contPantallaMedida);
 }
 void A_displayReloj(void){
-	APP_FUNCIONESLOGICA_A_setContador(contPantallaMedida, RESET);
+	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESET);
+	printf("Pantalla: %i \n\r", contPantallaMedida);
 	/*
 	 * Insertar función displayPantalla con ID = 0
 	 */
@@ -233,13 +240,19 @@ void A_displayGet(void){
 	/*
 	 * Insertar función displayPantalla con ID
 	 */
+	printf("Pantalla: Recogiendo datos... \r\n");
 }
 void A_displayDataResult(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
-	APP_FUNCIONESLOGICA_A_setContador(contPantallaMedida, RESTA);
+	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESTA);
 	/*
 	 * Insertar función displayPantalla con ID
 	 */
+	printf("Pantalla: Datos Recogidos \r\n");
+}
+
+void A_resetContador(void){
+	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESET);
 }
 
 /**
