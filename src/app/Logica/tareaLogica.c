@@ -12,6 +12,8 @@
  * @version 1.0
  * @todo aplicar entry a la máquina de estados
  * @todo platform.h como simulación
+ * @todo leds en estados sólo para pruebas
+ * @todo llamar a la función \link funcionesLogica.c\APP_FUNCIONESLOGICA_A_displayPantalla \endlink
  */
 
 /*****************************************************
@@ -75,18 +77,26 @@ FIN_AUTOMATA(careloj, 1, E_nulo)
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
 *****************************************************/
+/**
+ * @var       static unsigned int contPantallaMedida
+ * @brief     Variable global que lleva el valor del identificador de las pantallas relacionadas con los sensores.
+ * @author    Fernando Domínguez
+ * @date      24/03/2016
+*/
 static unsigned int contPantallaMedida = 0;
 
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 
+/***                    EVENTOS                   ***/
 /**
  * @fn      BOOLEAN E_UsuarioSeCae
  * @brief   Evento de la caída del usuario.
  * @par     Descripción de la función:
  *          Evento que se produce al caerse el usuario detectado por el acelerómetro.
  * @return  ret
+ * @author  F. Domínguez
  * @date    16/02/2016
  */
 BOOLEAN E_UsuarioSeCae(void){
@@ -99,10 +109,11 @@ BOOLEAN E_UsuarioSeCae(void){
 
 /**
  * @fn      BOOLEAN E_BotonEmergenciaPulsado
- * @brief   Evento de Botón de Emergencia pulsado
+ * @brief   Evento de Botón de Emergencia pulsado.
  * @par     Descripción de la función:
  *          Evento que se produce al pulsar el usuario el botón de Emergencia para pedir auxilio.
  * @return  ret
+ * @author  F. Domínguez
  * @date     16/02/2016
  */
 BOOLEAN E_BotonEmergenciaPulsado(void){
@@ -115,11 +126,12 @@ BOOLEAN E_BotonEmergenciaPulsado(void){
 
 /**
  * @fn      BOOLEAN E_BotonDisplayPulsado
- * @brief   Evento de botón de cambio de pantalla pulsado
+ * @brief   Evento de botón de cambio de pantalla pulsado.
  * @par     Descripción de la función:
  *          Evento que indica que el usuario quiere cambiar el dato que quiere visualizar en pantalla entre las
  *          distintas pantallas disponibles
  * @return  ret
+ * @author  F. Domínguez
  * @date    16/02/2016
  */
 BOOLEAN E_BotonDisplayPulsado(void){
@@ -132,10 +144,11 @@ BOOLEAN E_BotonDisplayPulsado(void){
 
 /**
  * @fn      BOOLEAN E_BotonRecogidaPulsado
- * @brief   Evento de botón de recogida de datos de los sensores
+ * @brief   Evento de botón de recogida de datos de los sensores.
  * @par     Descripción de la función:
  *          Evento que indica que el usuario va a recoger las medidas para ser enviadas posteriormente
  * @return  ret
+ * @author  F. Domínguez
  * @date    16/02/2016
  */
 BOOLEAN E_BotonRecogidaPulsado(void){
@@ -148,11 +161,12 @@ BOOLEAN E_BotonRecogidaPulsado(void){
 
 /**
  * @fn      BOOLEAN E_AvisoEnBuffer
- * @brief   Evento que indica que el dato está en el buffer de envío
+ * @brief   Evento que indica que el dato está en el buffer de envío.
  * @par     Descripción de la función:
  *          Evento producido cuando se escriben los datos de petición de socorro en el buffer de envío, desde
  *          el cual la tarea de envío va a enviar eses datos
  * @return  ret
+ * @author  F. Domínguez
  * @date    16/02/2016
  */
 BOOLEAN E_AvisoEnBuffer(void){
@@ -167,11 +181,12 @@ BOOLEAN E_AvisoEnBuffer(void){
 
 /**
  * @fn      BOOLEAN E_after10secs
- * @brief   Evento que indica que han pasado 10 segundos
+ * @brief   Evento que indica que han pasado 10 segundos.
  * @par     Descripción de la función:
  *          Evento para volver al estado IDLE si tras 10 segundos no se ha pulsado ningún botón de cambio de pantalla
  *          distintas pantallas disponibles
  * @return  ret
+ * @author  F. Domínguez
  * @date    16/02/2016
  */
 BOOLEAN E_after10secs(void){
@@ -186,11 +201,12 @@ BOOLEAN E_after10secs(void){
 
 /**
  * @fn      BOOLEAN E_FinRecogida
- * @brief   Evento que indica el fin de recogida de los datos de los sensores
+ * @brief   Evento que indica el fin de recogida de los datos de los sensores.
  * @par     Descripción de la función:
  *          Evento que indica que los datos de los sensores han sido recogidos y puestos en el buffer para envío o bien
  *          que ha sido imposible realizar la medición
  * @return  ret
+ * @author  F. Domínguez
  * @date    16/02/2016
  */
 BOOLEAN E_FinRecogida(void){
@@ -203,32 +219,45 @@ BOOLEAN E_FinRecogida(void){
 	return ret;
 }
 /**
- * @fn         BOOLEAN E_nulo(void)
- * @brief      Evento nulo para no salir de la máquina de estado.
- * @par		   Descripción de la función:
- *             Evento que siempre devuelve un valor FALSE para el correcto funcionamiento del motor
- *             de la máquina de estados y que esta se ejecute tipo while(1)
- * @return     ret = FALSE
- * @date       26/02/2016
+ * @fn      BOOLEAN E_nulo(void)
+ * @brief   Evento nulo para no salir de la máquina de estado.
+ * @par		Descripción de la función:
+ *          Evento que siempre devuelve un valor FALSE para el correcto funcionamiento del motor
+ *          de la máquina de estados y que esta se ejecute tipo while(1)
+ * @return  ret = FALSE
+ * @author  F. Domínguez
+ * @date    26/02/2016
 */
 BOOLEAN E_nulo(void){
 	BOOLEAN ret = FALSE;
 	return ret;
 }
 
+/***                   ACCIONES                   ***/
 /**
- * @brief   Declaración de las acciones de la máquina de estados
- * @par		Nombre acción:
- *			- A_semaforoRojo
- * @param   void
- * @return  void
+ * @fn      A_displayData(void)
+ * @brief   Acción que llama a mostrar pantalla según un contador de pantalla \link contPantallaMedida \endlink.
+ * @par		Descripción de la función:
+ *          Con \link APP_FUNCIONESLOGICA_A_setContador \endlink operamos sobre el contador de pantalla, en este
+ *          caso SUMA. Cada vez que se pulsa el botón avanza a la siguiente pantalla (a la inicial si está en la última).
+ * @author  F. Domínguez
+ * @date    26/02/2016
 */
-
 void A_displayData(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, SUMA);
 	printf("Pantalla: %i \n\r", contPantallaMedida);
 }
+
+/**
+ * @fn      A_displayReloj(void)
+ * @brief   Acción que llama a mostrar pantalla la pantalla del reloj con su id fijo.
+ * @par		Descripción de la función:
+ *          Con \link APP_FUNCIONESLOGICA_A_setContador \endlink operamos sobre el contador de pantalla, en este
+ *          caso RESET debido a que reloj es la pantalla inicial y se le asocia un 0 a su identificador.
+ * @author  F. Domínguez
+ * @date    26/02/2016
+*/
 void A_displayReloj(void){
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESET);
 	printf("Pantalla: %i \n\r", contPantallaMedida);
@@ -236,12 +265,32 @@ void A_displayReloj(void){
 	 * Insertar función displayPantalla con ID = 0
 	 */
 }
+
+/**
+ * @fn      A_displayGet(void)
+ * @brief   Acción que llama a mostrar por pantalla la pantalla de que el dispositivo está recogiendo datos.
+ * @par		Descripción de la función:
+ *          Con \link APP_FUNCIONESLOGICA_A_setContador \endlink operamos sobre el contador de pantalla, en este
+ *          caso RESET debido a que reloj es la pantalla inicial y se le asocia un 0 a su identificador.
+ * @author  F. Domínguez
+ * @date    26/02/2016
+*/
 void A_displayGet(void){
 	/*
 	 * Insertar función displayPantalla con ID
 	 */
 	printf("Pantalla: Recogiendo datos... \r\n");
 }
+
+/**
+ * @fn      A_displayDataResult(void)
+ * @brief   Acción que llama a mostrar por pantalla que el dispositivo ha acabado de recoger datos.
+ * @par		Descripción de la función:
+ *          Con \link APP_FUNCIONESLOGICA_A_setContador \endlink operamos sobre el contador de pantalla, en este
+ *          caso RESET debido a que reloj es la pantalla inicial y se le asocia un 0 a su identificador.
+ * @author  F. Domínguez
+ * @date    26/02/2016
+*/
 void A_displayDataResult(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESTA);
@@ -251,47 +300,77 @@ void A_displayDataResult(void){
 	printf("Pantalla: Datos Recogidos \r\n");
 }
 
+/**
+ * @fn      A_resetContador(void)
+ * @brief   Acción que resetea \link contPantallaMedida \endlink.
+ * @par		Descripción de la función:
+ *          Con \link APP_FUNCIONESLOGICA_A_setContador \endlink operamos sobre el contador de pantalla, en este
+ *          caso RESET. Al entrar en el estado de EMERGENCIA dede MOSTRANDO_DATOS resetea el contador.
+ * @author  F. Domínguez
+ * @date    17/03/2016
+*/
 void A_resetContador(void){
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESET);
 }
 
+/***                 DO ESTADOS                   ***/
 /**
- * @brief   Declaración de los DO a realizar en el estado que lo requiera
- * @par		Nombre DO:
- *			- ESTADO_verde_do
- * @param   void
- * @return  void
+ * @fn      ESTADO_idle_do(void)
+ * @brief   Do del estado IDLE con led indicador de que está en ese estado. SIMULACIÓN
+ * @author  Fernando Domínguez
+ * @date    17/03/2016
 */
-
 void ESTADO_idle_do(void){
 	HAL_AXI_GPIO_writeAxiLedPin(0,1);
 
 }
 
+/**
+ * @fn      ESTADO_emergencia_do(void)
+ * @brief   Do del estado EMERGENCIA.
+ * @par     Descripción de la función:
+ *          - Escribe en el led 1 para simulación
+ *          - Llama a la función de protocolo de emergencia. Recogida de datos y colgarlos en buffer envío \link DATAMANAGEMENT_envioEmergencia \endlink.
+ * @author  Fernando Domínguez
+ * @date    17/03/2016
+*/
 void ESTADO_emergencia_do(void){
 	HAL_AXI_GPIO_writeAxiLedPin(1,1);
 	APP_FUNCIONESLOGICA_DO_protocoloEmergencia();
 }
 
+/**
+ * @fn      ESTADO_mostrando_datos_do(void)
+ * @brief   Do del estado MOSTRANDO_DATOS con led indicador de que está en ese estado. SIMULACIÓN
+ * @author  Fernando Domínguez
+ * @date    17/03/2016
+*/
 void ESTADO_mostrando_datos_do(void){
 	HAL_AXI_GPIO_writeAxiLedPin(2,1);
 }
 
+/**
+ * @fn      ESTADO_recogiendo_datos_do(void)
+ * @brief   Do del estado RECOGIENDO_DATOS.
+ * @par     Descripción de la función:
+ *          - Escribe en el led 3 para simulación
+ *          - Llama a la función para recogida de datos y colgarlos en buffer envío \link DATAMANAGEMENT_envioDatos \endlink.
+ * @author  Fernando Domínguez
+ * @date    17/03/2016
+*/
 void ESTADO_recogiendo_datos_do(void){
 	HAL_AXI_GPIO_writeAxiLedPin(3,1);
 	APP_FUNCIONESLOGICA_DO_getData();
 }
 
-void ESTADO_accion_nula(void){
-	//VACÍO
-}
-
 /**
+ * @fn      APP_TAREALOGICA_ejecutaTarea(void)
  * @brief   Función que llama a la ejecución de la máquina de estados
- * @par		La función llama a un autómata que implementa en su interior
-            una máquina de estados:
- * @param   void
- * @return  void
+ * @par		Descripción de la función:
+ *          La función llama a un autómata que implementa en su interior
+ *          la máquina de estados definida.
+ * @author  Fernando Domínguez
+ * @date    17/03/2016
 */
 
 void APP_TAREALOGICA_ejecutaTarea(void){

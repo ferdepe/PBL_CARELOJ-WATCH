@@ -8,7 +8,7 @@
  * @author  F. Domínguez
  * @date    04/03/2016
  * @version 1.0
- */
+*/
 
 /*****************************************************
 *                   MODULES USED                     *
@@ -54,6 +54,13 @@ static XScuTimer TimerInstance; //Elemento al que se le asigna una iterrupción d
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
+/**
+ * @fn         HAL_TIMER_initTimer(unsigned int msecs)
+ * @brief      Función que inicializa el timer; configurando su tiempo entre activaciones, la interrupción y su habilitación
+ * @param[in]  unsigned int msecs
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 void HAL_TIMER_initTimer(unsigned int msecs) {
 #ifdef ZYNQ_7000
 	/*
@@ -67,9 +74,16 @@ void HAL_TIMER_initTimer(unsigned int msecs) {
 #endif
 }
 
-/*
- * Devuelve el valor acumulado de interrupciones del timer
- */
+/**
+ * @fn         HAL_TIMER_initTimer(void)
+ * @brief      Función que devuelve el valor acumulado en el timer.
+ * @par        Descripción de la función:
+ *             count devuelve el número de ticks del timer. Para calcular el tiempo hay que multiplicar por los
+ *             msecs con los que se ha configurado.
+ * @ret        count
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 unsigned int HAL_TIMER_getTimerCount() {
 	return count;
 }
@@ -77,9 +91,13 @@ unsigned int HAL_TIMER_getTimerCount() {
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/
-/*
- * Aumenta un contador cuando se produce la interrupción del timer
- */
+/**
+ * @fn         HAL_TIMER_timer_callback(XScuTimer * TimerInstance)
+ * @brief      Subrutina de interrupción del timer y reinicio del flag.
+ * @param[in]  XScuTimer * TimerInstance
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 void HAL_TIMER_timer_callback(XScuTimer * TimerInstance) {
 	count++;
 #ifdef SIMPLE_SCHEDULER
@@ -88,10 +106,13 @@ void HAL_TIMER_timer_callback(XScuTimer * TimerInstance) {
 	XScuTimer_ClearInterruptStatus(TimerInstance); //Pone flag a 0
 }
 
-/*
- * Configura el timer para que haga interrupción cada "msecs"
- * milisegundos.
- */
+/**
+ * @fn         HAL_TIMER_timer_callback(int msecs)
+ * @brief      Función para configurar los milisegundos del timer.
+ * @param[in]  int msecs
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 static void HAL_TIMER_setup_timer(int msecs) {
 #ifdef ZYNQ_7000
 	int Status = XST_SUCCESS;
@@ -126,9 +147,12 @@ static void HAL_TIMER_setup_timer(int msecs) {
 
 }
 
-/*
- * Configura las interrupciones
- */
+/**
+ * @fn         HAL_TIMER_setup_interrupts(void)
+ * @brief      Función para configurar las interrupciones.
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 static void HAL_TIMER_setup_interrupts() {
 #ifdef ZYNQ_7000
 	Xil_ExceptionInit();
@@ -148,9 +172,12 @@ static void HAL_TIMER_setup_interrupts() {
 	return;
 }
 
-/*
- * Habilita las interrupciones
- */
+/**
+ * @fn         HAL_TIMER_setup_interrupts(void)
+ * @brief      Función para habilitar las interrupciones.
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 static void HAL_TIMER_enable_interrupts() {
 #ifdef ZYNQ_7000
 	/* Enable non-critical exceptions.*/
