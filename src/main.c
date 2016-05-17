@@ -2,7 +2,7 @@
  * @file    main.c
  * @brief   Fichero principal
  * @par		Logica
- *			- Inizializa las tareas y el hardware
+ *			- Inicializa las tareas y el hardware
  *			- Tarea para gestionar el control de la máquina de estados del reloj
  *			- Tarea para gestionar el envío de datos del reloj al exterior
  * @par		Flujo
@@ -24,8 +24,6 @@
 
 int main()
 {
-    int pinActual;
-	APP_DATAMANAGEMENT_initBuffers();
 
 	HAL_TIMER_initTimer(100);
 

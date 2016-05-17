@@ -20,7 +20,6 @@
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
 #include "timer.h"
-#include "staticCircularBuffer.h"
 #include "dataManagement.h"
 #include "config.h"
 
@@ -39,9 +38,6 @@
 /*****************************************************
 *                EXPORTED VARIABLES                  *
 *****************************************************/
-STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioEmergencia;
-STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
-unsigned char DATAMANAGEMENT_idPantalla;
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -243,6 +239,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_avisoEnBuffer(){
 void APP_FUNCIONESLOGICA_A_displayPantalla(unsigned int nId){
 	/*
 	 * Insertar función displayPantalla con ID
+	 * CANDIDATA APP_DATAMANAGEMENT_setIdPantalla();
 	 */
 }
 
@@ -314,7 +311,8 @@ void APP_FUNCIONESLOGICA_DO_protocoloEmergencia(){
 
 	len = sizeof(str);
 
-	avisoEnBuffer = APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioEmergencia, str, len);
+	//avisoEnBuffer = APP_DATAMANAGEMENT_setSensorData(1);
+	avisoEnBuffer = 1;
 }
 
 /**
@@ -336,7 +334,8 @@ void APP_FUNCIONESLOGICA_DO_getData(){
 
 	len = sizeof(str);
 
-	endGetData = APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioDatos, str, len);
+	//endGetData = APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioDatos, str, len);
+	endGetData = 1;
 }
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *

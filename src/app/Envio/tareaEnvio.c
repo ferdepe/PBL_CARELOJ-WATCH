@@ -25,11 +25,6 @@
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
 
-
-STATIC_CIRCULAR_BUFFER dataBuffer_envioDatos;
-STATIC_CIRCULAR_BUFFER dataBuffer_envioEmergencia;
-
-
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
@@ -41,8 +36,6 @@ STATIC_CIRCULAR_BUFFER dataBuffer_envioEmergencia;
 /*****************************************************
 *                EXPORTED VARIABLES                  *
 *****************************************************/
-STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioEmergencia;
-STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -68,13 +61,13 @@ void APP_TAREAENVIO_ejecutaTarea(void){
 	unsigned char bufferDatosEmergencia[LONG_TRAMA_DATOS];
 
 
-	isData = APP_DATAMANAGEMENT_readFromBuffer(&DATAMANAGEMENT_envioDatos, bufferDatosSensores);
+	isData = 1;
 	if (isData){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR INTERNET
 		APP_FUNCIONESENVIO_send("Datos de Sensor",bufferDatosSensores);
 	}
 
-	isData = APP_DATAMANAGEMENT_readFromBuffer(&DATAMANAGEMENT_envioEmergencia, bufferDatosEmergencia);
+	isData = 1;
 	if (isData){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR GPRS
 		APP_FUNCIONESENVIO_send("Datos de Emergencia",bufferDatosEmergencia);

@@ -1,12 +1,12 @@
 /**
- * @file    dataBuffersAux.c
- * @brief   Fuente de las funciones para operar sobre buffers auxiliares
+ * @file    dataManagement.c
+ * @brief   Fuente de las funciones para el manejo de datos entre tareas
  * @par		Descripción de funciones:
- * 			En este ficherose implementan las funciones para poder escribir y leer sobre buffers auxiliares.
- * 			En principio, buffers circulares y variables globales
- * @version 1.5
+ * 			En este fichero se implementan las funciones para poder escribir y leer sobre variables privadas
+ * 			al fichero que permiten comunicar las tareas del programa de CARELOJ: Lógica, Envío y Pantalla
+ * @version 1.6
  * @author  F. Domínguez
- * @date    04/03/2015
+ * @date    17/05/2015
  */
 
 /*****************************************************
@@ -14,7 +14,6 @@
 *****************************************************/
 
 #include "dataManagement.h"
-#include "config.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
@@ -23,11 +22,7 @@
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
-typedef struct{
-	char id;
-	float value;
-	unsigned char units[UNITS_STRING];
-}DATAMANAGEMENT_MEMORY;
+
 /*****************************************************
 *           PROTOTYPES OF LOCAL FUNCTIONS            *
 *****************************************************/
@@ -36,10 +31,8 @@ typedef struct{
 *                EXPORTED VARIABLES                  *
 *****************************************************/
 
-extern STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
-extern STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioEmergencia;
-extern unsigned char DATAMANAGEMENT_idPantalla;
-extern DATAMANAGEMENT_MEMORY DATAMANAGEMENT_SensorValues[MEMORY_SIZE];
+unsigned int DATAMANAGEMENT_idPantalla;
+DATAMANAGEMENT_SENSOR_DATA DATAMANAGEMENT_SensorValues[NUMBER_SENSORS];
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -49,29 +42,21 @@ extern DATAMANAGEMENT_MEMORY DATAMANAGEMENT_SensorValues[MEMORY_SIZE];
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 
-void APP_DATAMANAGEMENT_initBuffers(){
-	STATIC_CIRCULAR_BUFFER_init(&DATAMANAGEMENT_envioDatos);
-	STATIC_CIRCULAR_BUFFER_init(&DATAMANAGEMENT_envioEmergencia);
+void APP_DATAMANAGEMENT_setIdPantalla(unsigned int nId){
+	DATAMANAGEMENT_idPantalla = nId;
 }
 
-unsigned int APP_DATAMANAGEMENT_send2Buffer(STATIC_CIRCULAR_BUFFER *obj, unsigned char *Data, unsigned int len){
-	int ret = 0;
-
-	ret = STATIC_CIRCULAR_BUFFER_insertChars(obj,Data,len);
-
-	return ret;
+unsigned int APP_DATAMANAGEMENT_getIdPantalla(void){
+	return DATAMANAGEMENT_idPantalla;
 }
 
-unsigned int APP_DATAMANAGEMENT_readFromBuffer(STATIC_CIRCULAR_BUFFER * obj, unsigned char *str_read){
-	int stringOK =0;
+void APP_DATAMANAGEMENT_setSensorData(int nIdSensor, float fValue, int nUnits){
+	DATAMANAGEMENT_SensorValues[nIdSensor].value = fValue;
+	DATAMANAGEMENT_SensorValues[nIdSensor].units = nUnits;
+}
 
-	stringOK = STATIC_CIRCULAR_BUFFER_existChar(obj,'$');
-
-	if(stringOK){
-		stringOK = STATIC_CIRCULAR_BUFFER_readChars(obj, str_read);
-	}
-
-	return stringOK;
+DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getSensorData(int idSensor){
+	return DATAMANAGEMENT_SensorValues[idSensor];
 }
 
 /*****************************************************
