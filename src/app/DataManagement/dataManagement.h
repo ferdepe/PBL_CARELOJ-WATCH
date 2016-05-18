@@ -26,11 +26,34 @@
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
+
 typedef struct{
-	//CONFIG_SENSORS id;
+	int north_degree;
+	int north_min;
+	float north_sec;
+	int south_degree;
+	int south_min;
+	float south_sec;
+}GPS_DATA;
+
+typedef struct{
+	CONFIG_SENSORS nId;
 	float value;
-	CONFIG_UNITS units;
 }DATAMANAGEMENT_SENSOR_DATA;
+
+typedef struct{
+	int nIdUsuario;
+	int nNumSensores;
+	DATAMANAGEMENT_SENSOR_DATA valuesRegister[NUMBER_SENSORS];
+	char bDatoPendEnv;
+}DATAMANAGEMENT_DATA_SEND;
+
+typedef struct{
+	int nIdUsuario;
+	float fValueBPM;
+	GPS_DATA valuesGPS;
+	char bDatoPendEnv;
+}DATAMANAGEMENT_EMERGENCY_SEND;
 
 /*****************************************************
 *                 EXPORTED VARIABLES                 *
@@ -40,10 +63,19 @@ typedef struct{
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
 
+void APP_DATAMANAGEMENT_initDataStructs(void);
+
 void APP_DATAMANAGEMENT_setIdPantalla(unsigned int nId);
 unsigned int APP_DATAMANAGEMENT_getIdPantalla(void);
-void APP_DATAMANAGEMENT_setSensorData(int nIdSensor, float fValue, int nUnits);
+
+void APP_DATAMANAGEMENT_setSensorData(int nIdSensor, float fValue);
 DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getSensorData(int idSensor);
+
+void APP_DATAMANAGEMENT_setDataToSend(int nIdSensor, float fValue);
+DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getDataToSend(void);
+
+void APP_DATAMANAGEMENT_setDataToEmergency(float nPulsaciones, GPS_DATA nValoresGPS);
+DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getDataToEmergency(void);
 
 /*****************************************************
 *                        EOF                         *

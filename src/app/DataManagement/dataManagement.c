@@ -31,8 +31,10 @@
 *                EXPORTED VARIABLES                  *
 *****************************************************/
 
-unsigned int DATAMANAGEMENT_idPantalla;
-DATAMANAGEMENT_SENSOR_DATA DATAMANAGEMENT_SensorValues[NUMBER_SENSORS];
+unsigned int nIdPantalla;
+DATAMANAGEMENT_SENSOR_DATA sensorValues[NUMBER_SENSORS];
+DATAMANAGEMENT_DATA_SEND dataToSend;
+DATAMANAGEMENT_EMERGENCY_SEND emergencyToSend;
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -41,23 +43,39 @@ DATAMANAGEMENT_SENSOR_DATA DATAMANAGEMENT_SensorValues[NUMBER_SENSORS];
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
+void APP_DATAMANAGEMENT_initDataStructs(void){
+	/* Init estructura Datos */
+	dataToSend.nIdUsuario =ID_DISP;
+	dataToSend.nNumSensores = NUMBER_SENSORS;
+	dataToSend.bDatoPendEnv = 0;
+
+	/* Init estructura Emergencia */
+	dataToSend.nIdUsuario =ID_DISP;
+	dataToSend.bDatoPendEnv = 0;
+
+	/* Otros */
+	nIdPantalla = 0;
+}
 
 void APP_DATAMANAGEMENT_setIdPantalla(unsigned int nId){
-	DATAMANAGEMENT_idPantalla = nId;
+	nIdPantalla = nId;
 }
 
 unsigned int APP_DATAMANAGEMENT_getIdPantalla(void){
-	return DATAMANAGEMENT_idPantalla;
+	return nIdPantalla;
 }
 
-void APP_DATAMANAGEMENT_setSensorData(int nIdSensor, float fValue, int nUnits){
-	DATAMANAGEMENT_SensorValues[nIdSensor].value = fValue;
-	DATAMANAGEMENT_SensorValues[nIdSensor].units = nUnits;
-}
+void APP_DATAMANAGEMENT_setSensorData(int nIdSensor, float fValue){
 
-DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getSensorData(int idSensor){
-	return DATAMANAGEMENT_SensorValues[idSensor];
 }
+DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getSensorData(int idSensor);
+
+void APP_DATAMANAGEMENT_setDataToSend(int nIdSensor, float fValue);
+DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getDataToSend(void);
+
+void APP_DATAMANAGEMENT_setDataToEmergency(float nPulsaciones, GPS_DATA nValoresGPS);
+DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getDataToEmergency(void);
+
 
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
