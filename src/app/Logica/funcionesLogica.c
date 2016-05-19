@@ -19,7 +19,7 @@
 *****************************************************/
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
-#include "timer.h"
+#include "timer_scugic.h"
 #include "dataManagement.h"
 #include "config.h"
 
@@ -180,7 +180,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readGreenButton(){
 BOOLEAN APP_FUNCIONESLOGICA_E_after10s(){
 	unsigned int cont = 0;
 
-	cont = HAL_TIMER_getTimerCount();
+	cont = HAL_TIMER_SCUGIC_getTimerCount();
 	if ((cont - contadorTimer) >= 20)
 		return 1;
 	else
@@ -287,7 +287,7 @@ void APP_FUNCIONESLOGICA_A_setContador(unsigned int *cont, unsigned char nOperac
  * @date       24/03/2016
 */
 void APP_FUNCIONESLOGICA_ENT_getTimerCount(){
-	contadorTimer = HAL_TIMER_getTimerCount();
+	contadorTimer = HAL_TIMER_SCUGIC_getTimerCount();
 }
 
 /**

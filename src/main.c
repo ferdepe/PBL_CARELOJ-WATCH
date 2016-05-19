@@ -17,7 +17,7 @@
 
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
-#include "timer.h"
+#include "timer_scugic.h"
 #include "axi-gpio.h"
 #include "dataManagement.h"
 
@@ -25,7 +25,7 @@
 int main()
 {
 
-	HAL_TIMER_initTimer(100);
+	HAL_TIMER_SCUGIC_initTimer(100);
 
 	while(1){
 		APP_TAREALOGICA_ejecutaTarea();

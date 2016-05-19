@@ -32,8 +32,8 @@
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-void HAL_TIMER_initTimer(unsigned int msecs);
-unsigned int HAL_TIMER_getTimerCount();
+void HAL_TIMER_SCUGIC_initTimer(unsigned int msecs);
+unsigned int HAL_TIMER_SCUGIC_getTimerCount();
 
 /*****************************************************
 *                        EOF                         *

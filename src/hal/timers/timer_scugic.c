@@ -13,7 +13,7 @@
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
-#include "timer.h"
+#include "timer_scugic.h"
 #include "xil_printf.h"
 #include "xscutimer.h"
 #include "xscugic.h"
@@ -36,10 +36,10 @@
 /*****************************************************
 *           PROTOTYPES OF LOCAL FUNCTIONS            *
 *****************************************************/
-static void HAL_TIMER_enable_interrupts();
-static void HAL_TIMER_setup_interrupts();
-static void HAL_TIMER_setup_timer(int msecs);
-static void HAL_TIMER_timer_callback(XScuTimer * TimerInstance); //Añado static
+static void HAL_TIMER_SCUGIC_enable_interrupts();
+static void HAL_TIMER_SCUGIC_setup_interrupts();
+static void HAL_TIMER_SCUGIC_setup_timer(int msecs);
+static void HAL_TIMER_SCUGIC_timer_callback(XScuTimer * TimerInstance); //Añado static
 /*****************************************************
 *                EXPORTED VARIABLES                  *
 *****************************************************/
@@ -61,16 +61,16 @@ static XScuTimer TimerInstance; //Elemento al que se le asigna una iterrupción d
  * @author     Fernando Domínguez
  * @date       24/03/2016
 */
-void HAL_TIMER_initTimer(unsigned int msecs) {
+void HAL_TIMER_SCUGIC_initTimer(unsigned int msecs) {
 #ifdef ZYNQ_7000
 	/*
 	 * Se inicializa primero el timer,
 	 * luego las interrupciones
 	 * y por último las lanzamos
 	 */
-	HAL_TIMER_setup_timer(msecs);
-	HAL_TIMER_setup_interrupts();
-	HAL_TIMER_enable_interrupts();
+	HAL_TIMER_SCUGIC_setup_timer(msecs);
+	HAL_TIMER_SCUGIC_setup_interrupts();
+	HAL_TIMER_SCUGIC_enable_interrupts();
 #endif
 }
 
@@ -84,7 +84,7 @@ void HAL_TIMER_initTimer(unsigned int msecs) {
  * @author     Fernando Domínguez
  * @date       24/03/2016
 */
-unsigned int HAL_TIMER_getTimerCount() {
+unsigned int HAL_TIMER_SCUGIC_getTimerCount() {
 	return count;
 }
 
@@ -98,7 +98,7 @@ unsigned int HAL_TIMER_getTimerCount() {
  * @author     Fernando Domínguez
  * @date       24/03/2016
 */
-void HAL_TIMER_timer_callback(XScuTimer * TimerInstance) {
+void HAL_TIMER_SCUGIC_timer_callback(XScuTimer * TimerInstance) {
 	count++;
 #ifdef SIMPLE_SCHEDULER
 	SIMPLE_SCHEDULER_update();
@@ -113,7 +113,7 @@ void HAL_TIMER_timer_callback(XScuTimer * TimerInstance) {
  * @author     Fernando Domínguez
  * @date       24/03/2016
 */
-static void HAL_TIMER_setup_timer(int msecs) {
+static void HAL_TIMER_SCUGIC_setup_timer(int msecs) {
 #ifdef ZYNQ_7000
 	int Status = XST_SUCCESS;
 	XScuTimer_Config *ConfigPtr;
@@ -153,7 +153,7 @@ static void HAL_TIMER_setup_timer(int msecs) {
  * @author     Fernando Domínguez
  * @date       24/03/2016
 */
-static void HAL_TIMER_setup_interrupts() {
+static void HAL_TIMER_SCUGIC_setup_interrupts() {
 #ifdef ZYNQ_7000
 	Xil_ExceptionInit();
 
@@ -164,7 +164,7 @@ static void HAL_TIMER_setup_interrupts() {
 			(void *) INTC_DEVICE_ID);
 	/*Conecte*/
 	XScuGic_RegisterHandler(INTC_BASE_ADDR, TIMER_IRPT_INTR,
-			(Xil_ExceptionHandler) HAL_TIMER_timer_callback,
+			(Xil_ExceptionHandler) HAL_TIMER_SCUGIC_timer_callback,
 			(void *) &TimerInstance);
 	//Habilita la interrupción para el scu timer
 	XScuGic_EnableIntr(INTC_DIST_BASE_ADDR, TIMER_IRPT_INTR);
@@ -178,7 +178,7 @@ static void HAL_TIMER_setup_interrupts() {
  * @author     Fernando Domínguez
  * @date       24/03/2016
 */
-static void HAL_TIMER_enable_interrupts() {
+static void HAL_TIMER_SCUGIC_enable_interrupts() {
 #ifdef ZYNQ_7000
 	/* Enable non-critical exceptions.*/
 	Xil_ExceptionEnableMask(XIL_EXCEPTION_IRQ);
