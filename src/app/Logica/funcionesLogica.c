@@ -18,9 +18,10 @@
 *                   MODULES USED                     *
 *****************************************************/
 #include "funcionesLogica.h"
-#include "axi-gpio.h"
+#include "axi-gpio.h
 #include "timer_scugic.h"
-#include "dataManagement.h"
+#include "dataToSend.h"
+#include "dataDisplay.h"
 #include "config.h"
 
 /*****************************************************
@@ -237,10 +238,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_avisoEnBuffer(){
  * @date       24/03/2016
 */
 void APP_FUNCIONESLOGICA_A_displayPantalla(unsigned int nId){
-	/*
-	 * Insertar función displayPantalla con ID
-	 * CANDIDATA APP_DATAMANAGEMENT_setIdPantalla();
-	 */
+	APP_DATA_DISPLAY_setIdPantalla(nId);
 }
 
 /**

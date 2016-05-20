@@ -1,5 +1,5 @@
 /**
- * @file    dataManagement.c
+ * @file    dataToSend.c
  * @brief   Fuente de las funciones para el manejo de datos entre tareas
  * @par		Descripción de funciones:
  * 			En este fichero se implementan las funciones para poder escribir y leer sobre variables privadas
@@ -13,7 +13,8 @@
 *                   MODULES USED                     *
 *****************************************************/
 
-#include "dataManagement.h"
+#include "dataToSend.h"
+#include "dataSensors.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
@@ -31,8 +32,8 @@
 *                EXPORTED VARIABLES                  *
 *****************************************************/
 
-unsigned int DATAMANAGEMENT_idPantalla;
-DATAMANAGEMENT_SENSOR_DATA DATAMANAGEMENT_SensorValues[NUMBER_SENSORS];
+static DATAMANAGEMENT_DATA_SEND dataToSend;
+static DATAMANAGEMENT_EMERGENCY_SEND emergencyToSend;
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -41,23 +42,56 @@ DATAMANAGEMENT_SENSOR_DATA DATAMANAGEMENT_SensorValues[NUMBER_SENSORS];
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
+void APP_DATA_TOSEND_initStructs(void){
+	/* Init estructura Datos */
+	dataToSend.nIdUsuario =ID_DISP;
+	dataToSend.nNumSensores = NUMBER_SENSORS;
+	dataToSend.bDatoPendEnv = 0;
 
-void APP_DATAMANAGEMENT_setIdPantalla(unsigned int nId){
-	DATAMANAGEMENT_idPantalla = nId;
+	/* Init estructura Emergencia */
+	emergencyToSend.nIdUsuario =ID_DISP;
+	emergencyToSend.bDatoPendEnv = 0;
+
 }
 
-unsigned int APP_DATAMANAGEMENT_getIdPantalla(void){
-	return DATAMANAGEMENT_idPantalla;
+/*******************ENVÍO NORMAL*********************/
+
+void APP_DATA_DATA_TOSEND_setDataToSend(int nIdSensor){
+	dataToSend.valuesRegister[nIdSensor] = APP_DATA_SENSORS_getSensorData(nIdSensor);
+}
+DATAMANAGEMENT_DATA_SEND APP_DATA_TOSEND_getDataToSend(void){
+	return dataToSend;
+}
+unsigned int APP_DATA_TOSEND_readyToSendData(void){
+	dataToSend.bDatoPendEnv = 1;
+	return RETURN_OK;
 }
 
-void APP_DATAMANAGEMENT_setSensorData(int nIdSensor, float fValue, int nUnits){
-	DATAMANAGEMENT_SensorValues[nIdSensor].value = fValue;
-	DATAMANAGEMENT_SensorValues[nIdSensor].units = nUnits;
+unsigned int APP_DATA_TOSEND_dataSentOK(void){
+	dataToSend.bDatoPendEnv = 0;
+	return RETURN_OK;
 }
 
-DATAMANAGEMENT_SENSOR_DATA APP_DATAMANAGEMENT_getSensorData(int idSensor){
-	return DATAMANAGEMENT_SensorValues[idSensor];
+/*****************ENVÍO EMERGENCIA*******************/
+
+void APP_DATA_TOSEND_setDataToEmergency(float nPulsaciones, GPS_DATA nValoresGPS){
+	emergencyToSend.fValueBPM = nPulsaciones;
+	emergencyToSend.valuesGPS = nValoresGPS;
 }
+
+DATAMANAGEMENT_EMERGENCY_SEND APP_DATA_TOSEND_getDataToEmergency(void){
+	return emergencyToSend;
+}
+
+unsigned int APP_DATA_TOSEND_readyToSendEmergency(void){
+	emergencyToSend.bDatoPendEnv = 1;
+	return RETURN_OK;
+}
+unsigned int APP_DATA_TOSEND_dataSentEmergency(void){
+	emergencyToSend.bDatoPendEnv = 0;
+	return RETURN_OK;
+}
+
 
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
