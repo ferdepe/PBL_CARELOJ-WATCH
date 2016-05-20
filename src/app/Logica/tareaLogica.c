@@ -246,6 +246,7 @@ BOOLEAN E_nulo(void){
 void A_displayData(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, SUMA);
+	APP_FUNCIONESLOGICA_A_displayPantalla(contPantallaMedida);
 	printf("Pantalla: %i \n\r", contPantallaMedida);
 }
 
@@ -260,6 +261,7 @@ void A_displayData(void){
 */
 void A_displayReloj(void){
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESET);
+	APP_FUNCIONESLOGICA_A_displayPantalla(contPantallaMedida);
 	printf("Pantalla: %i \n\r", contPantallaMedida);
 	/*
 	 * Insertar función displayPantalla con ID = 0

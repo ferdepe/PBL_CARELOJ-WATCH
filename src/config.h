@@ -8,6 +8,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#define ID_DISP 12345
 #define NUMBER_SENSORS 3 //2Sensores + 1Reloj
 
 #define LONG_TRAMA_DATOS 50
