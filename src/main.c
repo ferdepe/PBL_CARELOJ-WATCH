@@ -19,13 +19,14 @@
 #include "tareaEnvio.h"
 #include "timer.h"
 #include "axi-gpio.h"
-#include "dataManagement.h"
+#include "dataToSend.h"
 
 
 int main()
 {
 
 	HAL_TIMER_initTimer(100);
+	APP_DATA_SENSORS_initStructs;
 
 	while(1){
 		APP_TAREALOGICA_ejecutaTarea();
