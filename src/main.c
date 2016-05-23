@@ -17,7 +17,8 @@
 
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
-#include "tareaPantalla.h"#include "timer_scugic.h"
+#include "tareaPantalla.h"
+#include "timer_scugic.h"
 #include "axi-gpio.h"
 #include "dataToSend.h"
 

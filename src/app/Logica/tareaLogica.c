@@ -297,9 +297,7 @@ void A_displayGet(void){
 void A_displayDataResult(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESTA);
-	/*
-	 * Insertar función displayPantalla con ID 43
-	 */
+	APP_FUNCIONESLOGICA_A_displayPantalla(contPantallaMedida);
 	printf("Pantalla: Datos Recogidos \r\n");
 }
 

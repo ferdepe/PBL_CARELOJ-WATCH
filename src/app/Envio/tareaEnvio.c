@@ -57,8 +57,8 @@
 void APP_TAREAENVIO_ejecutaTarea(void){
 
 	int isData = 0;
-	unsigned char bufferDatosSensores[LONG_TRAMA_DATOS];
-	unsigned char bufferDatosEmergencia[LONG_TRAMA_DATOS];
+	unsigned char bufferDatosSensores[3];
+	unsigned char bufferDatosEmergencia[3];
 
 
 	isData = 1;

@@ -251,7 +251,6 @@ void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id)
 {
 	if(Id==PULSOMETRO) sprintf(str,"BPM");
 	else if(Id==BASCULA) sprintf(str,"KG");
-	else if(Id==GPS) sprintf(str,"GRADOS_N");
 	HAL_DISPLAY_printString(str,'U');
 }
 void APP_PANTALLA_printMensaje(char str[])

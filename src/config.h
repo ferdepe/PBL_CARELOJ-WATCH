@@ -11,19 +11,9 @@
 #define ID_DISP 12345
 #define NUMBER_SENSORS 3 //2Sensores + 1Reloj
 
-#define LONG_TRAMA_DATOS 50
-
 typedef enum{
-	PULSOMETRO,
+	PULSOMETRO = 1,
 	BASCULA,
-	GPS
 }CONFIG_SENSORS;
-
-typedef enum{
-	BPM,
-	KG,
-	GRADOS_N,
-	GRADOS_S
-}CONFIG_UNITS;
 
 #endif /* CONFIG_H_ */
