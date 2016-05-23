@@ -281,6 +281,7 @@ void A_displayGet(void){
 	/*
 	 * Insertar función displayPantalla con ID
 	 */
+	APP_FUNCIONESLOGICA_A_displayPantalla(40);
 	printf("Pantalla: Recogiendo datos... \r\n");
 }
 
@@ -297,7 +298,7 @@ void A_displayDataResult(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESTA);
 	/*
-	 * Insertar función displayPantalla con ID
+	 * Insertar función displayPantalla con ID 43
 	 */
 	printf("Pantalla: Datos Recogidos \r\n");
 }

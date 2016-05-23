@@ -10,8 +10,8 @@
  * @todo    Revisras el id de la estructura DATAMANAGEMENT_SENSOR_DATA , si es necesario o no.
  */
 
-#ifndef DATAMANAGEMENT_H_
-#define DATAMANAGEMENT_H_
+#ifndef DATATOSEND_H_
+#define DATATOSEND_H_
 
 /*****************************************************
 *                   MODULES USED                     *
@@ -24,7 +24,7 @@
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
 
-#define RETURN_OK 0
+#define RETURN_OK 1
 
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
@@ -77,4 +77,4 @@ unsigned int APP_DATA_TOSEND_dataSentEmergency(void);
 *                        EOF                         *
 *****************************************************/
 
-#endif /* DATAMANAGEMENT_H_ */
+#endif /* DATATOSEND_H_ */

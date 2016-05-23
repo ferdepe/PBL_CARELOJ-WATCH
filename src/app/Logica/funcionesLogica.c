@@ -18,8 +18,9 @@
 *                   MODULES USED                     *
 *****************************************************/
 #include "funcionesLogica.h"
-#include "axi-gpio.h
+#include "axi-gpio.h"
 #include "timer_scugic.h"
+#include "dataSensors.h"
 #include "dataToSend.h"
 #include "dataDisplay.h"
 #include "config.h"
@@ -82,7 +83,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readAcelerometer(){
 	unsigned int pinActual;
 	BOOLEAN ret;
 
-	pinActual = HAL_AXI_GPIO_readAxiButtonPin(2);
+	pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
 
 	if(pinActual && !pinAnterior)
 		ret = 1;
@@ -130,7 +131,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readBlackButton(){
 	unsigned int pinActual;
 	BOOLEAN ret;
 
-	pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
+	pinActual = HAL_AXI_GPIO_readAxiButtonPin(2);
 
 	if(pinActual && !pinAnterior)
 		ret = 1;
@@ -303,12 +304,6 @@ void APP_FUNCIONESLOGICA_DO_protocoloEmergencia(){
 	/*
 	 * INSERTAR AQUÍ FUNCIÓN QUE LLAMA A RECOGER DATOS EMERGENCIA
 	 */
-
-	unsigned int len = 0;
-	static unsigned char str[] = "7121238ID_20g30m40sN_10g30m21sO_100b$";
-
-	len = sizeof(str);
-
 	//avisoEnBuffer = APP_DATAMANAGEMENT_setSensorData(1);
 	avisoEnBuffer = 1;
 }
@@ -327,13 +322,12 @@ void APP_FUNCIONESLOGICA_DO_getData(){
 	 * INSERTAR AQUÍ FUNCIÓN DE REGOGIDA DE DATOS
 	 */
 
-	unsigned int len;
-	static unsigned char str[] = "7121238ID_pl100b_ps75kg$";
+	APP_DATA_SENSORS_setSensorData(PULSOMETRO, 130.0);
+	APP_DATA_DATA_TOSEND_setDataToSend(PULSOMETRO);
+	APP_DATA_SENSORS_setSensorData(BASCULA, 75);
+	APP_DATA_DATA_TOSEND_setDataToSend(BASCULA);
 
-	len = sizeof(str);
-
-	//endGetData = APP_DATAMANAGEMENT_send2Buffer(&DATAMANAGEMENT_envioDatos, str, len);
-	endGetData = 1;
+	endGetData = APP_DATA_TOSEND_readyToSendData();
 }
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
