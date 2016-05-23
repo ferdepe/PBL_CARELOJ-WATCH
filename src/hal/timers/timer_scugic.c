@@ -14,7 +14,6 @@
 *                   MODULES USED                     *
 *****************************************************/
 #include "timer_scugic.h"
-#include "xil_printf.h"
 #include "xscutimer.h"
 #include "xscugic.h"
 #include "xparameters.h"
