@@ -196,7 +196,7 @@ void displayBackground(){
 ///////////////////////////////////////////////////////////////
 ////////////Definicion de color de fondo de menu///////////////
 			fRed=128;
-			fBlue=128;
+			fBlue=250;
 			fGreen=0;
 ///////////////////////////////////////////////////////////////
 			/*
@@ -361,7 +361,7 @@ void displayTestCirc(int x0, int y0 , int r){
 
 		wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
 
-		fBlue = 0.0;
+		fBlue = 100.0;
 		fRed = 0.0;
 		fGreen = 255.0;
 		//fColor = fBlue;
