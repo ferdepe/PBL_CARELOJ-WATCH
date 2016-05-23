@@ -18,6 +18,8 @@
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
 #include "timer_scugic.h"
+#include "Timer_TTC.h"
+#include "Adc.h"
 #include "axi-gpio.h"
 #include "dataToSend.h"
 
@@ -26,6 +28,8 @@ int main()
 {
 
 	HAL_TIMER_SCUGIC_initTimer(100);
+	HAL_TIMER_TTC_initTimer();
+	HAL_ADC_Init();
 	APP_DATA_TOSEND_initStructs();
 
 	while(1){

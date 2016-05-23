@@ -23,6 +23,7 @@
 #include "dataSensors.h"
 #include "dataToSend.h"
 #include "dataDisplay.h"
+#include "Pulsometro.h"
 #include "config.h"
 
 /*****************************************************
@@ -321,8 +322,10 @@ void APP_FUNCIONESLOGICA_DO_getData(){
 	/*
 	 * INSERTAR AQUÍ FUNCIÓN DE REGOGIDA DE DATOS
 	 */
+	unsigned int BPM;
+	BPM = LIBS_PULSOMETRO_GetBPM();
 
-	APP_DATA_SENSORS_setSensorData(PULSOMETRO, 130.0);
+	APP_DATA_SENSORS_setSensorData(PULSOMETRO, /*130.0*/ BPM);
 	APP_DATA_DATA_TOSEND_setDataToSend(PULSOMETRO);
 	APP_DATA_SENSORS_setSensorData(BASCULA, 75);
 	APP_DATA_DATA_TOSEND_setDataToSend(BASCULA);

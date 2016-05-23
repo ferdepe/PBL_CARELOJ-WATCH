@@ -24,7 +24,7 @@
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
 //Simulación
-#include "platform.h"
+
 #include <stdio.h>
 
 /*****************************************************
