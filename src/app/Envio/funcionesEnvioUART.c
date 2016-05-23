@@ -14,7 +14,7 @@
 *                   MODULES USED                     *
 *****************************************************/
 #include "funcionesEnvio.h"
-#include "platform.h"
+//#include "platform.h"
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
@@ -39,7 +39,7 @@
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 void APP_FUNCIONESENVIO_initChannel(void){
-	init_platform();
+//	init_platform();
 }
 
 void APP_FUNCIONESENVIO_send(char * str_id, char * data){

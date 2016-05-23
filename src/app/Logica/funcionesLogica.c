@@ -18,7 +18,7 @@
 *                   MODULES USED                     *
 *****************************************************/
 #include "funcionesLogica.h"
-#include "axi-gpio.h
+#include "axi-gpio.h"
 #include "timer_scugic.h"
 #include "dataToSend.h"
 #include "dataDisplay.h"
