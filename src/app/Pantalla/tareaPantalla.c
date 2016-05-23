@@ -1,20 +1,18 @@
-/**
- * @file    funcionesEnvioUART.c
- * @brief   Source con la implementación para mandar y recibir información por UART
- * @par		Objetivo:
- *			Se enfoca a la portabilidad del código. Los nombres de las funciones y su
- *			funcionalidad serán siempre las mismas independientemente del protocolo.
- *			En este caso se emplea el protocolo UART.
- * @author  F. Domínguez
- * @date    17/03/2015
- * @version 1.0
+/*
+ * tareaPantalla.c
+ *
+ *  Created on: 20/05/2016
+ *      Author: Javo
  */
 
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
-#include "funcionesEnvio.h"
-//#include "platform.h"
+
+#include "tareaPantalla.h"
+#include "pantalla.h"
+
+
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
@@ -38,21 +36,27 @@
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
-void APP_FUNCIONESENVIO_initChannel(void){
-//	init_platform();
+/**
+ * @fn      void APP_PANTALLA_ejecutaTarea(void)
+ * @brief   Función que llama a la ejecución de la tarea referida a la visualización en pantalla.
+ * @par		Descripción de la función:
+ * 			Esta función llama a la lógica encargada de reproducir sobre la pantalla los posibles estados.
+ * 			A través de consultar el idPantalla y los datos, reproduce una pantalla particular.
+ * @param   void
+ * @return  void
+*/
+void APP_TAREAPANTALLA_ejecutaTarea(void){
+
+	APP_PANTALLA_mostrar();
 }
 
-void APP_FUNCIONESENVIO_send(char * str_id, char * data){
-
-	xil_printf(str_id);
-	xil_printf(": ");
-	xil_printf(data);
-	xil_printf("\r\n");
-}
-void APP_FUNCIONESENVIO_receive(char * data){
-
-}
+/*****************************************************
+*                EXPORTED VARIABLES                  *
+*****************************************************/
 
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/
+
+
+

@@ -17,27 +17,20 @@
 
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
-#include "timer_scugic.h"
+#include "tareaPantalla.h"#include "timer_scugic.h"
 #include "axi-gpio.h"
 #include "dataToSend.h"
 
-
 int main()
 {
-
-	HAL_TIMER_SCUGIC_initTimer(100);
 	APP_DATA_TOSEND_initStructs();
-
+	APP_PANTALLA_init();
+	HAL_TIMER_SCUGIC_initTimer(1000);
 	while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();
-		/*
-		pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
-		HAL_AXI_GPIO_writeAxiLedPin(0,pinActual);
-		pinActual = HAL_AXI_GPIO_readAxiButtonPin(2);
-		HAL_AXI_GPIO_writeAxiLedPin(2,pinActual);
-	    */
+		LIBS_WATCH_updateTime();
+	    APP_TAREAPANTALLA_ejecutaTarea();
 	}
-
     return 0;
 }
