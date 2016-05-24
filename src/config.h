@@ -14,13 +14,13 @@
 #define LONG_TRAMA_DATOS 50
 
 typedef enum{
-	PULSOMETRO,
+	PULSOMETRO=1,
 	BASCULA,
 	GPS
 }CONFIG_SENSORS;
 
 typedef enum{
-	BPM,
+	BPM=1,
 	KG,
 	GRADOS_N,
 	GRADOS_S

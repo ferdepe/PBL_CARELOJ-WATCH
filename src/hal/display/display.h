@@ -1,10 +1,9 @@
-
 /**
  * @file      display.h
- * @brief     Short description.
+ * @brief     Cabecera de las funciones de display.
  * @par		  Descripción de la función:
- * 			  par1
- *            par2
+ *			  Cabecera con la definición de las funciones
+ *			  generales públicas del display.
  * @author    Javier Barragán
  * @date      17/10/2015
  * @version   1.0
@@ -38,14 +37,15 @@
  * @fn         HAL_DISPLAY_init
  * @brief      Inicialización del Display.
  * @par		   Descripción de la función:
- * 			   par1
- *             par2
+ *			   Función encargada de inicializar
+ *			   el display para la pantalla.
  * @param[in]  void
  * @param[out] void
  * @author     Javier Barragán
  * @date       17/10/2015
  */
 void HAL_DISPLAY_init();
+
 /**
  * @fn         HAL_DISPLAY_printTipo
  * @brief      Impresión de cadena de caracteres en Display.
@@ -90,7 +90,10 @@ void HAL_DISPLAY_menu( char str[]);
  * @brief      Imprime un string por pantalla.
  * @par		   Descripción de la función:
  *
- * @param[in]  str[], cadena de caracteres. fRed,fGreen y fBlue valores RGB.
+ * @param[in]  str[], cadena de caracteres.
+ * @param[in]  fRed, intensidad de rojo en valores de RGB.
+ * @param[in]  fGreen, intensidad de verde en valores de RGB.
+ * @param[in]  fBlue, intensidad de azul en valores de RGB.
  * @param[out] void
  * @author     Javier Barragán
  * @date       17/10/2015
@@ -102,11 +105,24 @@ void HAL_DISPLAY_printData(float str[], double fRed, double fGreen, double fBlue
  * @brief      Lee el valor ingresado por consola.
  * @par		   Descripción de la función:
  *
- * @param[in]
- * @param[out] devuelve un 0.
+ * @param[in]  void
+ * @param[out] int devuelve un 0.
  * @author     Javier Barragán
  * @date       17/10/2015
  */
-int HAL_DISPLAY_readInteger();
+int HAL_DISPLAY_readInteger(void);
+
+/**
+ * @fn         HAL_DISPLAY_refresh
+ * @brief      Actualiza el display.
+ * @par		   Descripción de la función:
+ *			   Borra y el actualiza el buffer,
+ *			   y limpia la pantalla.
+ * @param[in]  void
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       24/10/2015
+ */
+void HAL_DISPLAY_refresh(void);
 
 #endif /* DISPLAY_H_ */

@@ -1,14 +1,14 @@
  /**
  * @file      pantalla.c
- * @brief     Short description.
+ * @brief     Fichero de las funciones utilizadas por la tareaPantalla.
  * @par		  Descripción de la función:
- * 			  par1
- *            par2
- * @author    author
- * @date      17/05/2016
+ * 			  Conjunto de funciones que utiliza la tareaPantalla para
+ * 			  comunicarse con el HAL para realizar al impresion en pantalla.
+ * @author    Javier Barragán
+ * @date      24/05/2016
  * @version   1.0
- * @todo      todo
- * @bug       bug
+ * @todo
+ * @bug
  */
 
 /*****************************************************
@@ -32,113 +32,20 @@
 /*****************************************************
 *           PROTOTYPES OF LOCAL FUNCTIONS            *
 *****************************************************/
-/**
- * @fn         APP_PANTALLA_screen0
- * @brief      Display del tiempo.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen0();
 
-/**
- * @fn         APP_PANTALLA_screen1
- * @brief      Display del tiempo.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen1();
+void APP_PANTALLA_screenClock(void);
 
-/**
- * @fn         APP_PANTALLA_screen2
- * @brief      Display de
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen2();
+void APP_PANTALLA_screenSensor(unsigned int Id);
 
-/**
- * @fn         APP_PANTALLA_screen3
- * @brief      Display de
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen3();
+void APP_PANTALLA_screenBanner(unsigned int Id);
 
-/**
- * @fn         APP_PANTALLA_screen40
- * @brief      Display de mensaje
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen40();
+void APP_PANTALLA_printTipo(CONFIG_SENSORS Id);
 
-/**
- * @fn         APP_PANTALLA_screen41
- * @brief      Display de
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen41();
+void APP_PANTALLA_printValor(float valor);
 
-/**
- * @fn         APP_PANTALLA_screen42
- * @brief      Display de
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen42();
+void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id);
 
-/**
- * @fn         APP_PANTALLA_screen43
- * @brief      Display de
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[in]  void
- * @param[out] void
- * @author     Javier Barragán
- * @date       17/05/2016
- */
-void APP_PANTALLA_screen43();
-void APP_PANTALLA_printTipo(char[]);
-void APP_PANTALLA_printValor(float);
-void APP_PANTALLA_printUnidad(CONFIG_SENSORS);
-void APP_PANTALLA_printMensaje(char[]);
+void APP_PANTALLA_printMensaje(char str[]);
 
 /*****************************************************
 *                EXPORTED VARIABLES                  *
@@ -157,96 +64,128 @@ void APP_PANTALLA_init()
 {
     //inicializacion display
     HAL_DISPLAY_init();
-    display_borrar_buffer();
-    displayBackground();
-    updateFrame();
+    HAL_DISPLAY_refresh();
 }
 
 void APP_PANTALLA_mostrar()
 {
-	switch(APP_DATA_DISPLAY_getIdPantalla())
-	{
-	case 0:
-	    APP_PANTALLA_screen0();
-	    break;
-	case 1:
-		APP_PANTALLA_screen1();
-		break;
-	case 2:
-		APP_PANTALLA_screen2();
-		break;
-	case 3:
-		APP_PANTALLA_screen3();
-		break;
-	case 40:
-		APP_PANTALLA_screen40();
-		break;
-	case 41:
-		APP_PANTALLA_screen41();
-		break;
-	case 42:
-		APP_PANTALLA_screen42();
-		break;
-	case 43:
-		APP_PANTALLA_screen43();
-		break;
-	}
+	unsigned int Id;
+	Id=APP_DATA_DISPLAY_getIdPantalla();
+	if(Id==0) APP_PANTALLA_screenClock();
+	else if(Id<10) APP_PANTALLA_screenSensor(Id);
+	else if(Id>10) APP_PANTALLA_screenBanner(Id);
+	else APP_PANTALLA_printMensaje("Error");
 }
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 ************************************************
 *****************************************************/
-void APP_PANTALLA_screen0()
+/**
+ * @fn         APP_PANTALLA_screenClock
+ * @brief      Display del tiempo.
+ * @par		   Descripción de la función:
+ * 			   Función que empieza con el llamado para
+ * 			   imprimir el reloj en pantalla.
+ * @param[in]  void
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       17/05/2016
+ */
+void APP_PANTALLA_screenClock()
 {
 	LIBS_WATCH_displayTime();
 }
-void APP_PANTALLA_screen1()
-{
-	DATAMANAGEMENT_SENSOR_DATA PULSOMETRO;
-	PULSOMETRO=APP_DATA_SENSORS_getSensorData(1);
 
-	APP_PANTALLA_printTipo("PULSOMETRO");
-	APP_PANTALLA_printValor(PULSOMETRO.value);
-	APP_PANTALLA_printUnidad(PULSOMETRO.nId);
+/**
+ * @fn         APP_PANTALLA_screenSensor
+ * @brief      Display del sensor.
+ * @par		   Descripción de la función:
+ * 			   Función que empieza con el llamado para
+ * 			   imprimir el tipo, valor y unidad de un sensor en pantalla.
+ * @param[in]  unsigned int ID, identificador del sensor.
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       17/05/2016
+ */
+void APP_PANTALLA_screenSensor(unsigned int Id)
+{
+	DATAMANAGEMENT_SENSOR_DATA SENSOR;
+	SENSOR=APP_DATA_SENSORS_getSensorData(Id);
+	APP_PANTALLA_printTipo(SENSOR.nId);
+	APP_PANTALLA_printValor(SENSOR.value);
+	APP_PANTALLA_printUnidad(SENSOR.nId);
 }
 
-void APP_PANTALLA_screen2()
+/**
+ * @fn         APP_PANTALLA_screenBanner
+ * @brief      Display de mensajes fijos.
+ * @par		   Descripción de la función:
+ * 			   Función encargada de reproducir en el
+ * 			   display los mensajes fijos sin valores.
+ * @param[in]  unsigned int Id, Identificador del mensaje.
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       17/05/2016
+ */
+void APP_PANTALLA_screenBanner(unsigned int Id)
 {
-	APP_PANTALLA_printTipo("SENSOR 2");
-	APP_PANTALLA_printValor(APP_DATA_SENSORS_getSensorData(2).value);
-	APP_PANTALLA_printUnidad(APP_DATA_SENSORS_getSensorData(2).nId);
+	if(Id==40)	APP_PANTALLA_printMensaje("Recogiendo Datos...");
+	else if(Id==41) APP_PANTALLA_printMensaje("Enviando Datos...");
+	else if(Id==42) APP_PANTALLA_printMensaje("Boton de panico ON");
+	else if(Id==43) APP_PANTALLA_printMensaje("Datos Recogidos");
+	else APP_PANTALLA_printMensaje("Error");
 }
-void APP_PANTALLA_screen3()
+
+/**
+ * @fn         APP_PANTALLA_printTipo
+ * @brief      Función para imprimir el Tipo de sensor.
+ * @par		   Descripción de la función:
+ * 			   Función encargada de reproducir en el
+ * 			   display el tipo de sensor seleccionado y que
+ * 			   se reproducirá sus datos en pantalla.
+ * @param[in]  CONFIG_SENSORS Id, Identificador de la estructura del sensor.
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       24/05/2016
+ */
+void APP_PANTALLA_printTipo(CONFIG_SENSORS Id)
 {
-	APP_PANTALLA_printTipo("SENSOR 3");
-	APP_PANTALLA_printValor(APP_DATA_SENSORS_getSensorData(3).value);
-	APP_PANTALLA_printUnidad(APP_DATA_SENSORS_getSensorData(3).nId);
-}
-void APP_PANTALLA_screen40()
-{
-	APP_PANTALLA_printMensaje("Recogiendo Datos...");
-}
-void APP_PANTALLA_screen41()
-{
-	APP_PANTALLA_printMensaje("Enviando Datos...");
-}
-void APP_PANTALLA_screen42()
-{
-	APP_PANTALLA_printMensaje("Boton de panico ON");
-}
-void APP_PANTALLA_screen43()
-{
-	APP_PANTALLA_printMensaje("Datos Recogidos");
-}
-void APP_PANTALLA_printTipo(char str[])
-{
+	if(Id==PULSOMETRO) sprintf(str,"PULSOMETRO");
+	else if(Id==BASCULA) sprintf(str,"BASCULA");
+	else if(Id==GPS) sprintf(str,"GPS");
 	HAL_DISPLAY_printString(str,'T');
 }
+
+/**
+ * @fn         APP_PANTALLA_printValor
+ * @brief      Función para imprimir el Valor del sensor.
+ * @par		   Descripción de la función:
+ * 			   Función encargada de reproducir en el
+ * 			   display el valor de sensor seleccionado y que
+ * 			   se reproducirá sus datos en pantalla.
+ * @param[in]  float valor, valor del sensor.
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       24/05/2016
+ */
 void APP_PANTALLA_printValor(float valor)
 {
 	sprintf(str,"%f\0",valor);
 	HAL_DISPLAY_printString(str,'V');
 }
+
+/**
+ * @fn         APP_PANTALLA_printUnidad
+ * @brief      Función para imprimir la Unidad del sensor.
+ * @par		   Descripción de la función:
+ * 			   Función encargada de reproducir en el
+ * 			   display la unidad del sensor seleccionado y que
+ * 			   se reproducirá sus datos en pantalla.
+ * @param[in]  CONFIG_SENSORS Id, Identificador del sensor.
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       24/05/2016
+ */
 void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id)
 {
 	if(Id==PULSOMETRO) sprintf(str,"BPM");
@@ -254,6 +193,18 @@ void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id)
 	else if(Id==GPS) sprintf(str,"GRADOS_N");
 	HAL_DISPLAY_printString(str,'U');
 }
+
+/**
+ * @fn         APP_PANTALLA_printMensaje
+ * @brief      Función para imprimir mensajes en pantalla.
+ * @par		   Descripción de la función:
+ * 			   Función encargada de reproducir en el
+ * 			   display mensajes y que se reproducirá en pantalla.
+ * @param[in]  char str[], cadena de caracteres del mensaje.
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       24/05/2016
+ */
 void APP_PANTALLA_printMensaje(char str[])
 {
 	HAL_DISPLAY_printString(str,'V');
