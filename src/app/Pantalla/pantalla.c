@@ -19,7 +19,6 @@
 #include "watch.h"
 #include "dataDisplay.h"
 #include "dataSensors.h"
-
 #include "pantalla.h"
 /*****************************************************
 *               DEFINITIONS AND MACROS               *

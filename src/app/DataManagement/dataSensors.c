@@ -32,6 +32,7 @@
 *****************************************************/
 
 static DATAMANAGEMENT_SENSOR_DATA sensorValues[NUMBER_SENSORS];
+static DATAMANAGEMENT_DATA_SEND dataToSend = {.nIdUsuario = ID_DISP ,.nNumSensores = NUMBER_SENSORS ,.bDatoPendEnv = 0};
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -42,12 +43,25 @@ static DATAMANAGEMENT_SENSOR_DATA sensorValues[NUMBER_SENSORS];
 *****************************************************/
 
 void APP_DATA_SENSORS_setSensorData(int nIdSensor, float fValue){
-	sensorValues[nIdSensor].nId = nIdSensor;
-	sensorValues[nIdSensor].value = fValue;
+	dataToSend.valuesRegister[nIdSensor].nId = sensorValues[nIdSensor].nId = nIdSensor;
+	dataToSend.valuesRegister[nIdSensor].value = sensorValues[nIdSensor].value = fValue;
+	dataToSend.bDatoPendEnv = 1;
 }
 
 DATAMANAGEMENT_SENSOR_DATA APP_DATA_SENSORS_getSensorData(int idSensor){
 	return sensorValues[idSensor];
+}
+
+DATAMANAGEMENT_DATA_SEND APP_DATA_SENSORS_getDataToSend(void){
+	return dataToSend;
+}
+
+int APP_DATA_SENSORS_dataReady(void){
+	return dataToSend.bDatoPendEnv;
+}
+
+void APP_DATA_SENSORS_dataSent(void){
+	dataToSend.bDatoPendEnv = 0;
 }
 
 

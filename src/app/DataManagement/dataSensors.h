@@ -32,6 +32,13 @@ typedef struct{
 	float value;
 }DATAMANAGEMENT_SENSOR_DATA;
 
+typedef struct{
+	int nIdUsuario;
+	int nNumSensores;
+	DATAMANAGEMENT_SENSOR_DATA valuesRegister[NUMBER_SENSORS];
+	unsigned int bDatoPendEnv;
+}DATAMANAGEMENT_DATA_SEND;
+
 /*****************************************************
 *                 EXPORTED VARIABLES                 *
 *****************************************************/
@@ -42,6 +49,9 @@ typedef struct{
 
 void APP_DATA_SENSORS_setSensorData(int nIdSensor, float fValue);
 DATAMANAGEMENT_SENSOR_DATA APP_DATA_SENSORS_getSensorData(int idSensor);
+DATAMANAGEMENT_DATA_SEND APP_DATA_SENSORS_getDataToSend(void);
+void APP_DATA_SENSORS_dataSent(void);
+int APP_DATA_SENSORS_dataReady(void);
 
 /*****************************************************
 *                        EOF                         *

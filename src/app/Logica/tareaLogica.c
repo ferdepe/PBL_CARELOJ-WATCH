@@ -24,7 +24,7 @@
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
 //Simulación
-//#include "platform.h"
+#include "watch.h"
 #include <stdio.h>
 
 /*****************************************************
@@ -376,6 +376,7 @@ void ESTADO_recogiendo_datos_do(void){
 
 void APP_TAREALOGICA_ejecutaTarea(void){
 	EjecutaAutomata(&careloj);
+	LIBS_WATCH_updateTime();
 }
 
 /*****************************************************
