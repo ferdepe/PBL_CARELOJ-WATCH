@@ -26,6 +26,9 @@ int main()
 {
 	APP_PANTALLA_init();
 	HAL_TIMER_SCUGIC_initTimer(1000);
+	APP_DATA_SENSORS_setSensorData(1,65.5);
+	APP_DATA_SENSORS_setSensorData(2,77.8);
+	APP_DATA_SENSORS_setSensorData(3,90);
 	while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();

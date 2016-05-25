@@ -1,14 +1,14 @@
 /**
  * @file      pantalla.h
- * @brief     Short description.
- * @par		  Descripción de la función:
- * 			  par1
- *            par2
+ * @brief     Header de las funciones utilizadas por la tareaPantalla.
+ * @par		  Descripción:
+ * 			  Conjunto de funciones que utiliza la tareaPantalla para
+ * 			  comunicarse con el HAL para realizar al impresion en pantalla.
  * @author    Javier Barragán
- * @date      17/05/2016
+ * @date      24/05/2016
  * @version   1.0
- * @todo      todo
- * @bug       bug
+ * @todo
+ * @bug
  */
  #ifndef PANTALLA_H_
 #define PANTALLA_H_
@@ -47,7 +47,7 @@
  * @author     Javier Barragán
  * @date       17/05/2016
  */
-void APP_PANTALLA_init();
+void APP_PANTALLA_init(void);
 
 /**
  * @fn         APP_PANTALLA_mostrar
@@ -62,7 +62,7 @@ void APP_PANTALLA_init();
  * @author     Javier Barragán
  * @date       17/05/2016
  */
-void APP_PANTALLA_mostrar();
+void APP_PANTALLA_mostrar(void);
 /*****************************************************
 *                        EOF                         *
 *****************************************************/

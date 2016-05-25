@@ -10,10 +10,8 @@
 
 #define ID_DISP 12345
 #define NUMBER_SENSORS 3 //2Sensores + 1Reloj
-
 typedef enum{
-	PULSOMETRO = 1,
+PULSOMETRO = 1,
 	BASCULA,
 }CONFIG_SENSORS;
-
 #endif /* CONFIG_H_ */
