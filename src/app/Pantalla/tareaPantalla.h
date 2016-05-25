@@ -1,17 +1,18 @@
 /**
- * @file    dataDisplay.h
- * @brief   Header de las funciones para el manejo de la pantalla
- * @par		Descripción de funciones:
- * 			En este fichero se declaran las funciones para poder escribir y leer sobre
- * 			la variable privada que permiten comunicar las tareas de Lógica y Pantalla.
- * @version 1.0
- * @author  F. Domínguez
- * @date    20/05/2015
+ * @file      tareaPantalla.h
+ * @brief     Header con las funciones externas de la tarea encargada de manejar la pantalla.
+ * @par		  Descripción de la función:
+* 			  Conjunto de funciones externas para que la logica general de la aplicación
+* 			  pueda manipular la tarea de impresión en pantalla.
+ * @author    Javier Barragán
+ * @date      24/05/2016
+ * @version   1.0
+ * @todo
+ * @bug
  */
 
-#ifndef DATADISPLAY_H_
-#define DATADISPLAY_H_
-
+#ifndef TAREAPANTALLA_H_
+#define TAREAPANTALLA_H_
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
@@ -31,12 +32,8 @@
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-
-void APP_DATA_DISPLAY_setIdPantalla(unsigned int nId);
-unsigned int APP_DATA_DISPLAY_getIdPantalla(void);
-
+void APP_TAREAPANTALLA_ejecutaTarea(void);
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
-
-#endif /* DATADISPLAY_H_ */
+#endif /* TAREAPANTALLA_H_ */

@@ -23,9 +23,8 @@
 #include "tareaLogica.h"
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
-//Simulación
-
-#include <stdio.h>
+//Simulación"
+#include "watch.h#include <stdio.h>
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
@@ -297,9 +296,7 @@ void A_displayGet(void){
 void A_displayDataResult(void){
 	APP_FUNCIONESLOGICA_ENT_getTimerCount();
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESTA);
-	/*
-	 * Insertar función displayPantalla con ID 43
-	 */
+	APP_FUNCIONESLOGICA_A_displayPantalla(contPantallaMedida);
 	printf("Pantalla: Datos Recogidos \r\n");
 }
 
@@ -378,6 +375,7 @@ void ESTADO_recogiendo_datos_do(void){
 
 void APP_TAREALOGICA_ejecutaTarea(void){
 	EjecutaAutomata(&careloj);
+	LIBS_WATCH_updateTime();
 }
 
 /*****************************************************

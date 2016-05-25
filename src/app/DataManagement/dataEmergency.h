@@ -1,17 +1,17 @@
 /**
- * @file    dataSensors.h
- * @brief   Header de las funciones para el manejo del envío de datos de los sensores.
+ * @file    dataEmergency.h
+ * @brief   Header de las funciones para el manejo del envío de datos de Emergencia.
  * @par		Descripción de funciones:
- * 			En este fichero se declaran las funciones encargadas de reunir los datos
- * 			relacionados con los sensores y su envío. Se declaran las estructuran que
- * 			lo posibilitan.
+ * 			En este fichero se declaran las funciones para poder escribir y leer sobre
+ * 			la variable privada en forma de estructura encargada de reunir todos los datos
+ * 			necesarios a enviar durante el protocolo de Emergencia.
  * @version 1.0
  * @author  F. Domínguez
  * @date    24/05/2016
  */
 
-#ifndef DATASENSORS_H_
-#define DATASENSORS_H_
+#ifndef DATAEMERGENCY_H_
+#define DATAEMERGENCY_H_
 
 /*****************************************************
 *                   MODULES USED                     *
@@ -27,36 +27,40 @@
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
 /**
- * @struct     DATAMANAGEMENT_SENSOR_DATA
- * @brief      Almacena el tipo y dato de cada sensor.
+ * @struct     GPS_DATA
+ * @brief      Almacena las coordenadas del GPS
  * @par        Descripción:
- *             - CONFIG_SENSORS nId indica el tipo de sensor
+ *             - Grados, minutos y segundos NORTE
  *             - float value indica la magnitud medida del sensor.
  * @author     F. Domínguez
- * @date       24/05/2016
+ * @date       25/05/2016
  */
 typedef struct{
-	CONFIG_SENSORS nId;
-	float value;
-}DATAMANAGEMENT_SENSOR_DATA;
+	int north_degree;
+	int north_min;
+	float north_sec;
+	int south_degree;
+	int south_min;
+	float south_sec;
+}GPS_DATA;
 
 /**
- * @struct     DATAMANAGEMENT_DATA_SEND
+ * @struct     DATAMANAGEMENT_EMERGENCY_SEND
  * @brief      Almacena la información a ser mandada de los sensores.
  * @par        Descripción:
  *             - int nIdUsuario es el identificador del dispositivo asignado
- *             - int nNumSensores es el número de sensores asociados al dispositivo.
- *             - DATAMANAGEMENT_SENSOR_DATA valuesRegister[NUMBER_SENSORS] son los valores almacenados del sensor
- *             - unsigned int bDatoPendEnv flag que indica si hay dato a enviar o no.
+ *             - float fValueBPM
+ *             - GPS_DATA valuesGPS
+ *             - unsigned int bDatoPendEnv flag que indica si hay datos de emergencia a enviar o no.
  * @author     F. Domínguez
  * @date       24/05/2016
  */
 typedef struct{
 	int nIdUsuario;
-	int nNumSensores;
-	DATAMANAGEMENT_SENSOR_DATA valuesRegister[NUMBER_SENSORS];
+	float fValueBPM;
+	GPS_DATA valuesGPS;
 	unsigned int bDatoPendEnv;
-}DATAMANAGEMENT_DATA_SEND;
+}DATAMANAGEMENT_EMERGENCY_SEND;
 
 /*****************************************************
 *                 EXPORTED VARIABLES                 *
@@ -65,15 +69,13 @@ typedef struct{
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-
-void APP_DATA_SENSORS_setSensorData(int nIdSensor, float fValue);
-DATAMANAGEMENT_SENSOR_DATA APP_DATA_SENSORS_getSensorData(int idSensor);
-DATAMANAGEMENT_DATA_SEND APP_DATA_SENSORS_getDataToSend(void);
-void APP_DATA_SENSORS_dataSent(void);
-int APP_DATA_SENSORS_dataReady(void);
+void APP_DATA_EMERGENCY_setDataToEmergency(float nPulsaciones, GPS_DATA nValoresGPS);
+DATAMANAGEMENT_EMERGENCY_SEND APP_DATA_EMERGENCY_getDataToEmergency(void);
+int APP_DATA_EMERGENCY_dataReady(void);
+void APP_DATA_EMERGENCY_emergencySent(void);
 
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
 
-#endif /* DATASENSORS_H_ */
+#endif /* DATAEMERGENCY_H_ */

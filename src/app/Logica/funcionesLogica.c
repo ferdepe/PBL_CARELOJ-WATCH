@@ -21,7 +21,8 @@
 #include "axi-gpio.h"
 #include "timer_scugic.h"
 #include "dataSensors.h"
-#include "dataToSend.h"
+
+#include "dataEmergency.h"
 #include "dataDisplay.h"
 #include "Pulsometro.h"
 #include "config.h"
@@ -305,8 +306,11 @@ void APP_FUNCIONESLOGICA_DO_protocoloEmergencia(){
 	/*
 	 * INSERTAR AQUÍ FUNCIÓN QUE LLAMA A RECOGER DATOS EMERGENCIA
 	 */
-	//avisoEnBuffer = APP_DATAMANAGEMENT_setSensorData(1);
-	avisoEnBuffer = 1;
+	GPS_DATA gpsValues = {30,45,23.0,12,33,30.2};
+	float fPulsaciones = 220.0;
+
+	APP_DATA_EMERGENCY_setDataToEmergency(fPulsaciones, gpsValues);
+	avisoEnBuffer = APP_DATA_EMERGENCY_dataReady();
 }
 
 /**
@@ -325,12 +329,13 @@ void APP_FUNCIONESLOGICA_DO_getData(){
 	unsigned int BPM;
 	BPM = LIBS_PULSOMETRO_GetBPM();
 
-	APP_DATA_SENSORS_setSensorData(PULSOMETRO, /*130.0*/ BPM);
-	APP_DATA_DATA_TOSEND_setDataToSend(PULSOMETRO);
-	APP_DATA_SENSORS_setSensorData(BASCULA, 75);
-	APP_DATA_DATA_TOSEND_setDataToSend(BASCULA);
 
-	endGetData = APP_DATA_TOSEND_readyToSendData();
+	APP_DATA_SENSORS_setSensorData(PULSOMETRO, /*130.0*/ BPM);
+	
+	APP_DATA_SENSORS_setSensorData(BASCULA, 75);
+	
+	
+	endGetData = APP_DATA_SENSORS_dataReady();
 }
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *

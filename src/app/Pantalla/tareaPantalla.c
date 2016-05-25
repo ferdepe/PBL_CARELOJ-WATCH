@@ -1,20 +1,25 @@
-/**
- * @file    funcionesEnvioUART.c
- * @brief   Source con la implementación para mandar y recibir información por UART
- * @par		Objetivo:
- *			Se enfoca a la portabilidad del código. Los nombres de las funciones y su
- *			funcionalidad serán siempre las mismas independientemente del protocolo.
- *			En este caso se emplea el protocolo UART.
- * @author  F. Domínguez
- * @date    17/03/2015
- * @version 1.0
+ /**
+ * @file      tareaPantalla.c
+ * @brief     Fichero con las funciones externas de la tarea encargada de manejar la pantalla.
+ * @par		  Descripción de la función:
+* 			  Conjunto de funciones externas para que la logica general de la aplicación
+* 			  pueda manipular la tarea de impresión en pantalla.
+  * @author   Javier Barragán
+ * @date      24/05/2016
+ * @version   1.0
+ * @todo
+ * @bug
  */
 
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
-#include "funcionesEnvio.h"
-//#include "platform.h"/*****************************************************
+
+#include "tareaPantalla.h"
+#include "pantalla.h"
+
+
+/*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
 
@@ -37,20 +42,27 @@
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
-void APP_FUNCIONESENVIO_initChannel(void){
-	//init_platform();}
+/**
+ * @fn      void APP_PANTALLA_ejecutaTarea(void)
+ * @brief   Función que llama a la ejecución de la tarea referida a la visualización en pantalla.
+ * @par		Descripción de la función:
+ * 			Esta función llama a la lógica encargada de reproducir sobre la pantalla los posibles estados.
+ * 			A través de consultar el idPantalla y los datos, reproduce una pantalla particular.
+ * @param   void
+ * @return  void
+*/
+void APP_TAREAPANTALLA_ejecutaTarea(void){
 
-void APP_FUNCIONESENVIO_send(char * str_id, char * data){
-
-	xil_printf(str_id);
-	xil_printf(": ");
-	xil_printf(data);
-	xil_printf("\r\n");
+	APP_PANTALLA_mostrar();
 }
-void APP_FUNCIONESENVIO_receive(char * data){
 
-}
+/*****************************************************
+*                EXPORTED VARIABLES                  *
+*****************************************************/
 
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/
+
+
+
