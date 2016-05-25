@@ -1,14 +1,14 @@
-/**
- * @file      pantalla.c
- * @brief     Short description.
+ /**
+ * @file      display.c
+ * @brief     Fichero de las funciones utilizadas por el display.
  * @par		  Descripción de la función:
- * 			  par1
- *            par2
- * @author    author
- * @date      17/10/2015
+ *            Fichero con las funciones para comunicarse con el
+ *            Hardware del display a utilizar.
+ * @author    Javier Barragán
+ * @date      24/05/2016
  * @version   1.0
- * @todo	  HAL_DISPLAY_menu sin uso
- * @bug
+ * @todo
+ * @bug       no se utiliza HAL_DISPLAY_menu().
  */
 
 /*****************************************************
@@ -85,6 +85,12 @@ void HAL_DISPLAY_menu( char str[])
 
 }
 
+void HAL_DISPLAY_refresh(void)
+{
+    display_borrar_buffer();
+    displayBackground();
+    updateFrame();
+}
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/

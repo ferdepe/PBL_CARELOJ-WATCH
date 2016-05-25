@@ -1,44 +1,62 @@
-/************************************************************************************
- * watch.c
- * Created on: xx/10/2015
- * Author: Javier Barragán
- * Version: 1.0
- ************************************************************************************/
-/********************************************
- * Includes de modulos externos
- *******************************************/
+ /**
+ * @file      watch.c
+ * @brief     Fichero con las funciones referida a la lógica del reloj.
+ * @par		  Descripción de la función:
+ *			  Funciones que se encargan de la lógica del funcionamiento
+ *			  de la hora, minutos y segundos del reloj.
+ * @author    Javier Barragán
+ * @date      24/05/2016
+ * @version   1.0
+ * @todo
+ * @bug       No se utiliza LIBS_WATCH_GMT().
+ */
+/*****************************************************
+*                   MODULES USED                     *
+*****************************************************/
 #include <stdio.h>
 #include "display.h"
 #include "timer_scugic.h"
 
-/********************************************
- * Includes de definiciones del modulo
- *******************************************/
 #include "watch.h"
+/*****************************************************
+*               DEFINITIONS AND MACROS               *
+*****************************************************/
 
-/********************************************
- * Variables internas/privadas del modulo(ENCAPSULAMIENTO)
- *******************************************/
+/*****************************************************
+*              TYPEDEFS AND STRUCTURES               *
+*****************************************************/
+
+/*****************************************************
+*           PROTOTYPES OF LOCAL FUNCTIONS            *
+*****************************************************/
+
+void LIBS_WATCH_initTime();
+int LIBS_WATCH_GMT();
+
+/*****************************************************
+*                EXPORTED VARIABLES                  *
+*****************************************************/
+
+/*****************************************************
+*                  GLOBAL VARIABLES                  *
+*****************************************************/
+
 static T_TIME actualTime;
 static unsigned int countA = 0;
 static unsigned int countB = 2;
 int aux; //boton gmt
 
-/********************************************
- * Funciones privadas del modulo(ENCAPSULAMIENTO)
- *******************************************/
-void LIBS_WATCH_initTime();
-int LIBS_WATCH_GMT();
+/*****************************************************
+*                EXPORTED FUNCTIONS                  *
+*****************************************************/
 
-/********************************************
- * Implementacion de funciones publicas
- *******************************************/
 void LIBS_WATCH_setTime( T_TIME time )
 {
 	actualTime.hour=time.hour;
 	actualTime.min=time.min;
 	actualTime.seg=time.seg;
 }
+
 void LIBS_WATCH_updateTime()
 {
 	countA = HAL_TIMER_SCUGIC_getTimerCount();
@@ -61,10 +79,9 @@ void LIBS_WATCH_updateTime()
 			actualTime.hour = 0;
 		}
 		countB = countA;
-
 	}
-
 }
+
 void LIBS_WATCH_displayTime()
 {
 	char str[20],str2[10];
@@ -95,15 +112,38 @@ void LIBS_WATCH_displayTime()
 	HAL_DISPLAY_printString(str2,'U');
 }
 
-/********************************************
- * Implementacion de funciones privadas
- *******************************************/
+/*****************************************************
+*                  LOCAL FUNCTIONS                   *
+*****************************************************/
+/**
+ * @fn         LIBS_WATCH_initTime
+ * @brief      Inicialización del tiempo.
+ * @par		   Descripción de la función:
+ *			   Inicializa a 0 todas las variables de la
+ *			   estructura tiempo: hora, minutos y segundos.
+ * @param[in]  void
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       17/10/2015
+ */
 void LIBS_WATCH_initTime()
 {
 	actualTime.hour=0;
 	actualTime.min=0;
 	actualTime.seg=0;
 }
+
+/**
+ * @fn         LIBS_WATCH_GMT
+ * @brief      Cambio de formato de reloj.
+ * @par		   Descripción de la función:
+ * 			   Leyendo botón permite seleccionar el formato
+ * 			   del tipo de reloj AM/PM o 24hs.
+ * @param[in]  void
+ * @param[out] void
+ * @author     Javier Barragán
+ * @date       17/10/2015
+ */
 int LIBS_WATCH_GMT()
 {
 	int status;
