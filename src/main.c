@@ -19,19 +19,21 @@
 #include "tareaEnvio.h"
 #include "tareaPantalla.h"
 #include "timer_scugic.h"
+#include "Timer_TTC.h"
+#include "Adc.h"
 #include "axi-gpio.h"
 #include "pantalla.h"
 
 int main()
 {
-	APP_PANTALLA_init();
 	HAL_TIMER_SCUGIC_initTimer(1000);
-	APP_DATA_SENSORS_setSensorData(1,65.5);
-	APP_DATA_SENSORS_setSensorData(2,77.8);
-	APP_DATA_SENSORS_setSensorData(3,90);
-	while(1){
+HAL_TIMER_TTC_initTimer();
+HAL_ADC_Init();	while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();
+		
+		
+	    
 	    APP_TAREAPANTALLA_ejecutaTarea();
 	}
     return 0;

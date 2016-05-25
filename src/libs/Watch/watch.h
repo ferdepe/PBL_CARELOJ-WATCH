@@ -31,6 +31,7 @@ typedef struct t_time
 	unsigned char min;
 	unsigned char seg;
 } T_TIME;
+
 /*****************************************************
 *                 EXPORTED VARIABLES                 *
 *****************************************************/
@@ -77,5 +78,17 @@ void LIBS_WATCH_updateTime();
  */
 void LIBS_WATCH_displayTime();
 
+/**
+ * @fn         LIBS_WATCH_displayTime
+ * @brief      Devolución del tiempo.
+ * @par		   Descripción de la función:
+ *			   Función que devuelve la estructura con valores
+ *			   del tiempo: hora, minutos y segundos.
+ * @param[in]  void
+ * @param[out] T_TIME actualtime, estructura de tiempo actual.
+ * @author     Javier Barragán
+ * @date       24/10/2016
+ */
+T_TIME LIBS_WATCH_getTime();
 
 #endif /* WATCH_H_ */

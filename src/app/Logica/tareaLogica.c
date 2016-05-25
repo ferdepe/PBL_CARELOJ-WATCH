@@ -23,9 +23,9 @@
 #include "tareaLogica.h"
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
-//Simulación
 #include "watch.h"
 #include <stdio.h>
+
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *

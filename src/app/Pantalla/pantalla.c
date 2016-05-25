@@ -49,13 +49,12 @@ void APP_PANTALLA_printMensaje(char str[]);
 /*****************************************************
 *                EXPORTED VARIABLES                  *
 *****************************************************/
-char str[];
+
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
 *****************************************************/
-
-//variables globales, precedidas de static (privada)
-
+char strT[10], strV[6], strU[3];
+char str[];
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
@@ -63,7 +62,7 @@ void APP_PANTALLA_init()
 {
     //inicializacion display
     HAL_DISPLAY_init();
-    HAL_DISPLAY_refresh();
+    //HAL_DISPLAY_refresh();
 }
 
 void APP_PANTALLA_mostrar()
@@ -92,7 +91,12 @@ void APP_PANTALLA_mostrar()
  */
 void APP_PANTALLA_screenClock()
 {
-	LIBS_WATCH_displayTime();
+	T_TIME tiempo;
+	tiempo=LIBS_WATCH_getTime();
+	sprintf(strT, "TIEMPO\n");
+	sprintf( strV, "%2d::%2d::%2d", tiempo.hour, tiempo.min, tiempo.seg);
+	sprintf(strU, "\0");
+	HAL_DISPLAY_screen(strT,strV,strU);
 }
 
 /**
@@ -113,6 +117,7 @@ void APP_PANTALLA_screenSensor(unsigned int Id)
 	APP_PANTALLA_printTipo(SENSOR.nId);
 	APP_PANTALLA_printValor(SENSOR.value);
 	APP_PANTALLA_printUnidad(SENSOR.nId);
+	HAL_DISPLAY_screen(strT,strV,strU);
 }
 
 /**
@@ -149,9 +154,9 @@ void APP_PANTALLA_screenBanner(unsigned int Id)
  */
 void APP_PANTALLA_printTipo(CONFIG_SENSORS Id)
 {
-	if(Id==PULSOMETRO) sprintf(str,"PULSOMETRO");
-	else if(Id==BASCULA) sprintf(str,"BASCULA");
-	HAL_DISPLAY_printString(str,'T');
+	if(Id==PULSOMETRO) sprintf(strT,"PULSOMETRO");
+	else if(Id==BASCULA) sprintf(strT,"BASCULA");
+	//else if(Id==GPS) sprintf(str,"GPS");
 }
 
 /**
@@ -168,8 +173,7 @@ void APP_PANTALLA_printTipo(CONFIG_SENSORS Id)
  */
 void APP_PANTALLA_printValor(float valor)
 {
-	sprintf(str,"%f\0",valor);
-	HAL_DISPLAY_printString(str,'V');
+	sprintf(strV,"%f",valor);
 }
 
 /**
@@ -186,9 +190,8 @@ void APP_PANTALLA_printValor(float valor)
  */
 void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id)
 {
-	if(Id==PULSOMETRO) sprintf(str,"BPM");
-	else if(Id==BASCULA) sprintf(str,"KG");
-	HAL_DISPLAY_printString(str,'U');
+	if(Id==PULSOMETRO) sprintf(strU,"BPM");
+	else if(Id==BASCULA) sprintf(strU,"KG");
 }
 
 /**
@@ -204,5 +207,5 @@ void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id)
  */
 void APP_PANTALLA_printMensaje(char str[])
 {
-	HAL_DISPLAY_printString(str,'V');
+	HAL_DISPLAY_screen("",str,"");
 }
