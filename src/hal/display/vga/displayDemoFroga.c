@@ -178,7 +178,7 @@ void displayBackground(){
 
 	fColor = 0.0;
 	wCurrentInt = 0b010;
-	for(xcoi = 0; xcoi < width; xcoi++){
+	for(xcoi = 3*width/8; xcoi < 5*width/8; xcoi++){
 			/*if (wCurrentInt & 0b001)
 				fRed = fColor;
 			else
@@ -214,7 +214,7 @@ void displayBackground(){
 
 			for(ycoi = 0; ycoi < height; ycoi++)
 			{
-				vgaBuf[0][iPixelAddr] = wColor;
+				frameBuffer[iPixelAddr] = wColor;
 				/*
 				 * This pattern is printed one vertical line at a time, so the address must be incremented
 				 * by the stride instead of just 1.
@@ -229,7 +229,7 @@ void displayBackground(){
 				wCurrentInt++;
 			}
 		}
-	displayTestCirc(vgaCtrl.vMode.width/2,vgaCtrl.vMode.height/2,100);
+	displayTestCirc(vgaCtrl.vMode.width/2,vgaCtrl.vMode.height/2,100);//menu
 	//displayTestRect(vgaCtrl.vMode.width/2, vgaCtrl.vMode.height/2, 200 , 100);
 	/*
 	* Flush the framebuffer memory range to ensure changes are written to the
@@ -375,17 +375,17 @@ void displayTestCirc(int x0, int y0 , int r){
 			y = (int) ( sqrt( (r*r)- ((x-x0)*(x-x0))  ) );
 			//y = (int) ( Q_rsqrt( (r*r)- ((x-x0)*(x-x0))  ) );
 			iPixelAddr = x + ((y0+y)*wStride);
-			vgaBuf[0][iPixelAddr] = wColor;
+			frameBuffer[iPixelAddr] = wColor;
 			aux = yOld-y;
 			if ( aux> 1  ) {
 					for ( i = 1 ; i <= aux ; i++ ){
 						iPixelAddr = x + ((y0+y-i)*wStride);
-						vgaBuf[0][iPixelAddr] = wColor;
+						frameBuffer[iPixelAddr] = wColor;
 					}
 			}else if (yOld -y < 1){
 					for ( i = 1 ; i <= y-yOld ; i++ ){
 						iPixelAddr = x + ((y0+y-i)*wStride);
-						vgaBuf[0][iPixelAddr] = wColor;
+						frameBuffer[iPixelAddr] = wColor;
 					}
 			}
 			yOld = y;
@@ -394,17 +394,17 @@ void displayTestCirc(int x0, int y0 , int r){
 			if ( aux> 1  ) {
 					for ( i = 1 ; i <= aux ; i++ ){
 						iPixelAddr = x + ((y0+y-i)*wStride);
-						vgaBuf[0][iPixelAddr] = wColor;
+						frameBuffer[iPixelAddr] = wColor;
 					}
 			}else if (aux < 1){
 				for ( i = 1 ; i <= y-yOld ; i++ ){
 					iPixelAddr = x + ((y0+y-i)*wStride);
-					vgaBuf[0][iPixelAddr] = wColor;
+					frameBuffer[iPixelAddr] = wColor;
 				}
 			}
 
 			iPixelAddr = x + ((y0-y)*wStride);
-			vgaBuf[0][iPixelAddr] = wColor;
+			frameBuffer[iPixelAddr] = wColor;
 			//Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 4);
 		}
 			/*
@@ -566,31 +566,6 @@ void displayTestCirc_Perimetro(int x0, int y0 , int r){
 		//Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 1);
 }
 
-void display_borrar_buffer(){
-	u32 x;
-	int y;
-	int height_limit = 0;
-	int width_limit = 0;
-	u32 wStride;
-	u32 iPixelAddr;
-	double fRed, fBlue, fGreen;
-	u32 wColor;
-	//
-	fBlue = 0;
-	fRed = 0;
-	fGreen = 0;
-	wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
-	wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
-	height_limit = vgaCtrl.vMode.height;
-	width_limit = vgaCtrl.vMode.width;
-	for( x = 0 ; x <= height_limit; x++){
-		for ( y = 0 ; y <  width_limit ; y++ ){
-			iPixelAddr = x + ((y)*wStride);
-			vgaBuf[0][iPixelAddr] = wColor;
-		}
-	}
-	//Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 4);
-}
 
 
 
@@ -627,7 +602,7 @@ void displayChar(int x0 , int y0 , char kar){
 				auxByte = line & (mask<<x);
 				if ( auxByte > 0){
 					iPixelAddr = (x0+x) +  (  (y0 + i ) * wStride ) ;
-					vgaBuf[0][iPixelAddr] = wColor;
+					frameBuffer[iPixelAddr] = wColor;
 				}
 			}
 		}
@@ -636,7 +611,7 @@ void displayChar(int x0 , int y0 , char kar){
 			* Flush the framebuffer memory range to ensure changes are written to the
 			* actual memory, and therefore accessible by the VDMA.
 			*/
-		Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 1);
+		//Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 1);
 
 
 }
@@ -686,112 +661,82 @@ float Q_rsqrt( float number )
 
 void borrarFrameBuffer(){
 
-
-u32 x;
-
-int y;
-
-int height_limit = 0;
-
-int width_limit = 0;
-
-u32 wStride;
-
-u32 iPixelAddr;
-
-double fRed, fBlue, fGreen;
-
-u32 wColor;
-
-//
-
-int index = 0;
-
-
-fBlue = 0;
-
-fRed = 0;
-
-fGreen = 0;
-
-wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
-
-wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
-
-height_limit = vgaCtrl.vMode.height;
-
-width_limit = vgaCtrl.vMode.width;
-
-for( x = 0 ; x <= height_limit; x++){
-
-for ( y = 0 ; y <  width_limit ; y++ ){
-
-iPixelAddr = x + ((y)*wStride);
-
-frameBuffer[iPixelAddr] = wColor;
-
+	u32 x;
+	int y;
+	int height_limit = 0;
+	int width_limit = 0;
+	u32 wStride;
+	u32 iPixelAddr;
+	double fRed, fBlue, fGreen;
+	u32 wColor;
+	//
+	int index = 0;
+	fBlue = 0;
+	fRed = 0;
+	fGreen = 0;
+	wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
+	wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
+	height_limit = vgaCtrl.vMode.height;
+	width_limit = vgaCtrl.vMode.width;
+	for( x = 0 ; x <= height_limit; x++){
+		for ( y = 0 ; y <  width_limit ; y++ ){
+			iPixelAddr = x + ((y)*wStride);
+			frameBuffer[iPixelAddr] = wColor;
+			}
+	}
 }
 
+void display_borrar_buffer(){
+	u32 x;
+	int y;
+	int height_limit = 0;
+	int width_limit = 0;
+	u32 wStride;
+	u32 iPixelAddr;
+	double fRed, fBlue, fGreen;
+	u32 wColor;
+	//
+	fBlue = 0;
+	fRed = 0;
+	fGreen = 0;
+	wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
+	wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
+	height_limit = vgaCtrl.vMode.height;
+	width_limit = vgaCtrl.vMode.width;
+	for( x = 0 ; x <= height_limit; x++){
+		for ( y = 0 ; y <  width_limit ; y++ ){
+			iPixelAddr = x + ((y)*wStride);
+			vgaBuf[0][iPixelAddr] = wColor;
+		}
+	}
+	Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 4);
 }
-
-
-
-}
-
 
 void copiarFrameBuffer(){
 
-
-u32 x;
-
-int y;
-
-int height_limit = 0;
-
-int width_limit = 0;
-
-u32 wStride;
-
-u32 iPixelAddr;
-
-double fRed, fBlue, fGreen;
-
-u32 wColor;
-
-//
-
-int index = 0;
-
-
-fBlue = 0;
-
-fRed = 0;
-
-fGreen = 0;
-
-wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
-
-wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
-
-height_limit = vgaCtrl.vMode.height;
-
-width_limit = vgaCtrl.vMode.width;
-
-for( x = 0 ; x <= height_limit; x++){
-
-for ( y = 0 ; y <  width_limit ; y++ ){
-
-iPixelAddr = x + ((y)*wStride);
-
-vgaBuf[index][iPixelAddr] = frameBuffer[iPixelAddr];
-
-
-}
-
-}
-
-
-
+	u32 x;
+	int y;
+	int height_limit = 0;
+	int width_limit = 0;
+	u32 wStride;
+	u32 iPixelAddr;
+	double fRed, fBlue, fGreen;
+	u32 wColor;
+	//
+	int index = 0;
+	fBlue = 128;
+	fRed = 250;
+	fGreen = 0;
+	wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
+	wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
+	height_limit = vgaCtrl.vMode.height;
+	width_limit = vgaCtrl.vMode.width;
+	for( x = 0 ; x <= height_limit; x++){
+		for ( y = 0 ; y <  width_limit ; y++ ){
+			iPixelAddr = x + ((y)*wStride);
+			vgaBuf[index][iPixelAddr] = frameBuffer[iPixelAddr];
+		}
+	}
 }
 
 

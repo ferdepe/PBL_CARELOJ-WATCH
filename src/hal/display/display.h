@@ -47,18 +47,21 @@
 void HAL_DISPLAY_init();
 
 /**
- * @fn         HAL_DISPLAY_printTipo
- * @brief      Impresión de cadena de caracteres en Display.
+ * @fn         HAL_DISPLAY_screen
+ * @brief      Impresión de la pantalla en Display.
  * @par		   Descripción de la función:
- * 			   imprime la cadena de caracteres str.
- *             letra indica la posicion en pantalla dependiendo
+ * 			   Imprime las cadenas de caracteres str's.
+ *             La letra indica la posición en pantalla dependiendo
  *             si es [T]ipo, [V]alor o [U]nidad.
- * @param[in]  str[] y letra.
+ * @param[in]  str[],cadena de caracter de entrada a reproducir.
+ * @param[in]  str1[],cadena de caracter de entrada a reproducir.
+ * @param[in]  str2[],cadena de caracter de entrada a reproducir.
  * @param[out] void
  * @author     Javier Barragán
- * @date       17/10/2015
+ * @date       25/05/2016
  */
-void HAL_DISPLAY_printString(char str[], char letra);
+void HAL_DISPLAY_screen(char strT[], char strV[], char strU[]);
+
 /**
  * @fn         HAL_DISPLAY_printString
  * @brief      Impresión de cadena de caracteres en Display.
