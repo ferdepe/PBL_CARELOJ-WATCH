@@ -62,7 +62,6 @@ void LIBS_WATCH_updateTime()
 	countA = HAL_TIMER_SCUGIC_getTimerCount();
 	if (countB != countA)
 	{
-        displayMenu();
 		actualTime.seg++;
 		if (actualTime.seg >= 60)
 		{
@@ -84,34 +83,36 @@ void LIBS_WATCH_updateTime()
 
 void LIBS_WATCH_displayTime()
 {
-	char str[20],str2[10];
+	char strT[5], strV[10], strU[3];
 	int hora;
-	sprintf(str, "TIEMPO\0");
-	HAL_DISPLAY_printString(str,'T');
+	sprintf(strT, "TIEMPO\n");
 	aux = LIBS_WATCH_GMT();
 	if (aux==1)
 	{
 		if(actualTime.hour > 12)
 		{
 			hora=actualTime.hour-12;
-			sprintf( str, "%2d::%2d::%2d", hora, actualTime.min, actualTime.seg);
-			sprintf(str2, "PM\0");
+			sprintf( strV, "%2d::%2d::%2d", hora, actualTime.min, actualTime.seg);
+			sprintf(strU, "PM");
 		}
 		else //(actualTime.hour<12)
 		{
-			sprintf( str, "%2d::%2d::%2d", actualTime.hour, actualTime.min, actualTime.seg);
-			sprintf(str2, "AM\0");
+			sprintf( strV, "%2d::%2d::%2d", actualTime.hour, actualTime.min, actualTime.seg);
+			sprintf(strU, "AM");
 		}
 	}
 	else
 		{
-			sprintf( str, "%2d::%2d::%2d", actualTime.hour, actualTime.min, actualTime.seg);
-			sprintf(str2, "\0");
+			sprintf( strV, "%2d::%2d::%2d", actualTime.hour, actualTime.min, actualTime.seg);
+			sprintf(strU, "\0");
 		}
-	HAL_DISPLAY_printString(str,'V');
-	HAL_DISPLAY_printString(str2,'U');
+	//HAL_DISPLAY_screen(strT,strV,strU);
 }
 
+T_TIME LIBS_WATCH_getTime()
+{
+	return actualTime;
+}
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/

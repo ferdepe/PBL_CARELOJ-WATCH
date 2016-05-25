@@ -49,9 +49,23 @@
 void HAL_DISPLAY_init()
 {
 	displayInit();
-	display_borrar_buffer();
+	//displayBackground();
+	//display_borrar_buffer();
+	//borrarFrameBuffer();
+	//displayMenu();
+	copiarFrameBuffer();
+	updateFrame();
 }
-
+void HAL_DISPLAY_screen(char strT[], char strV[], char strU[])
+{
+	borrarFrameBuffer();
+	displayBackground();
+	HAL_DISPLAY_printString(strT, 'T');
+	HAL_DISPLAY_printString(strV, 'V');
+	HAL_DISPLAY_printString(strU, 'U');
+	copiarFrameBuffer();
+	updateFrame();
+}
 void HAL_DISPLAY_printString(char str[], char tipo)
 {
 	int	 i, y,x0;
@@ -59,10 +73,14 @@ void HAL_DISPLAY_printString(char str[], char tipo)
 	if (tipo=='V' ) y = 240;//valor
 	if (tipo=='U' ) y = 250;//unidad
 	x0=((strlen(str))/2)*10;
+		//borrarFrameBuffer();
+		//displayMenu();
 	for( i=0; i<strlen(str); i++)
 	{
 		displayChar(x0-10*i, y , str[i]);
 	}
+	//copiarFrameBuffer();
+	//updateFrame();
 }
 
 void HAL_DISPLAY_printData(float str[], double fRed, double fGreen, double fBlue)
@@ -88,7 +106,9 @@ void HAL_DISPLAY_menu( char str[])
 void HAL_DISPLAY_refresh(void)
 {
     display_borrar_buffer();
+    borrarFrameBuffer();
     displayBackground();
+    copiarFrameBuffer();
     updateFrame();
 }
 /*****************************************************
