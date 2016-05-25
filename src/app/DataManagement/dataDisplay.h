@@ -1,13 +1,12 @@
 /**
  * @file    dataDisplay.h
- * @brief   Header de las funciones para el manejo de datos entre tareas
+ * @brief   Header de las funciones para el manejo de la pantalla
  * @par		Descripción de funciones:
- * 			En este fichero se declaran las funciones para poder escribir y leer sobre variables privadas
- * 			al fichero que permiten comunicar las tareas del programa de CARELOJ: Lógica, Envío y Pantalla
- * @version 1.6
+ * 			En este fichero se declaran las funciones para poder escribir y leer sobre
+ * 			la variable privada que permiten comunicar las tareas de Lógica y Pantalla.
+ * @version 1.0
  * @author  F. Domínguez
- * @date    17/05/2015
- * @todo    Revisras el id de la estructura DATAMANAGEMENT_SENSOR_DATA , si es necesario o no.
+ * @date    20/05/2015
  */
 
 #ifndef DATADISPLAY_H_

@@ -1,13 +1,13 @@
 /**
- * @file    dataSensor.h
- * @brief   Header de las funciones para el manejo de datos entre tareas
+ * @file    dataSensors.h
+ * @brief   Header de las funciones para el manejo del envío de datos de los sensores.
  * @par		Descripción de funciones:
- * 			En este fichero se declaran las funciones para poder escribir y leer sobre variables privadas
- * 			al fichero que permiten comunicar las tareas del programa de CARELOJ: Lógica, Envío y Pantalla
- * @version 1.6
+ * 			En este fichero se declaran las funciones encargadas de reunir los datos
+ * 			relacionados con los sensores y su envío. Se declaran las estructuran que
+ * 			lo posibilitan.
+ * @version 1.0
  * @author  F. Domínguez
- * @date    17/05/2015
- * @todo    Revisras el id de la estructura DATAMANAGEMENT_SENSOR_DATA , si es necesario o no.
+ * @date    24/05/2016
  */
 
 #ifndef DATASENSORS_H_
@@ -26,12 +26,31 @@
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
-
+/**
+ * @struct     DATAMANAGEMENT_SENSOR_DATA
+ * @brief      Almacena el tipo y dato de cada sensor.
+ * @par        Descripción:
+ *             - CONFIG_SENSORS nId indica el tipo de sensor
+ *             - float value indica la magnitud medida del sensor.
+ * @author     F. Domínguez
+ * @date       24/05/2016
+ */
 typedef struct{
 	CONFIG_SENSORS nId;
 	float value;
 }DATAMANAGEMENT_SENSOR_DATA;
 
+/**
+ * @struct     DATAMANAGEMENT_DATA_SEND
+ * @brief      Almacena la información a ser mandada de los sensores.
+ * @par        Descripción:
+ *             - int nIdUsuario es el identificador del dispositivo asignado
+ *             - int nNumSensores es el número de sensores asociados al dispositivo.
+ *             - DATAMANAGEMENT_SENSOR_DATA valuesRegister[NUMBER_SENSORS] son los valores almacenados del sensor
+ *             - unsigned int bDatoPendEnv flag que indica si hay dato a enviar o no.
+ * @author     F. Domínguez
+ * @date       24/05/2016
+ */
 typedef struct{
 	int nIdUsuario;
 	int nNumSensores;
