@@ -20,11 +20,10 @@
 #include "tareaPantalla.h"
 #include "timer_scugic.h"
 #include "axi-gpio.h"
-#include "dataToSend.h"
+#include "pantalla.h"
 
 int main()
 {
-	APP_DATA_TOSEND_initStructs();
 	APP_PANTALLA_init();
 	HAL_TIMER_SCUGIC_initTimer(1000);
 	APP_DATA_SENSORS_setSensorData(1,65.5);
@@ -33,7 +32,6 @@ int main()
 	while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();
-		LIBS_WATCH_updateTime();
 	    APP_TAREAPANTALLA_ejecutaTarea();
 	}
     return 0;

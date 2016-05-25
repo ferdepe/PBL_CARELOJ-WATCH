@@ -18,7 +18,8 @@
 
 #include "tareaEnvio.h"
 #include "funcionesEnvio.h"
-#include "dataToSend.h"
+#include "dataSensors.h"
+#include "dataEmergency.h"
 #include "config.h"
 
 /*****************************************************
