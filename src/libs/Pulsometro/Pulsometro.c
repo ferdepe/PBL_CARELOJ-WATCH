@@ -93,10 +93,10 @@ unsigned int BPM;
 unsigned int LIBS_PULSOMETRO_GetBPM(){
 	static int cnt = 0, cnt1 = 0, resta;
 
-	cnt = HAL_TIMER_TTC_getCount();
+	cnt = HAL_TIMER_TTC_GetTimerCount();
 
 	while(resta < 10){
-		cnt1 = HAL_TIMER_TTC_getCount();
+		cnt1 = HAL_TIMER_TTC_GetTimerCount();
 		resta = cnt1 - cnt;
 		PULSOMETRO_ContadorDePulsos();
 	}

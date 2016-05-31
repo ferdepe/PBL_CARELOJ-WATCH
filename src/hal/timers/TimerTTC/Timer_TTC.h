@@ -1,14 +1,12 @@
 /**
- * @file      Timer.h
- * @brief     Ficheros relacionados para inicializar y utilizar el timer TTC.
+ * @file      timer_ttc.h
+ * @brief     Short description.
  * @par		  Descripción de la función:
  * 			  par1
  *            par2
- * @author    Mikel Etxebeste Larrea
- * @date      18/05/2016
+ * @author    author
+ * @date      dd/mm/yyyy
  * @version   1.0
- * @todo      todo
- * @bug       bug
  */
 
 #ifndef TIMER_TTC_H_
@@ -18,13 +16,12 @@
 *                   MODULES USED                     *
 *****************************************************/
 
-
+#include "xttcps.h"
+#include "gic_arm.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
-
-//defines
 
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
@@ -34,37 +31,15 @@
 *                 EXPORTED VARIABLES                 *
 *****************************************************/
 
-//variables externas si hay
-
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-/**
- * @fn         HAL_initTTC1
- * @brief      Función que inicializa el timer TTC.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @author     Mikel Etxebeste
- * @date       18/05/2016
- **/
-void HAL_TIMER_TTC_initTimer();
-/**
- * @fn         HAL_initTTC1
- * @brief      Función que obtiene el contador de la interrupción que interrumpe cada segundo.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @author     Mikel Etxebeste
- * @date       18/05/2016
- **/
-unsigned int HAL_TIMER_TTC_getCount();
+
+int HAL_TIMER_TTC_TimerSetup(unsigned int nHz);
+int HAL_TIMER_TTC_GetTimerCount(void);
 
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
-
-
-
 
 #endif /* TIMER_TTC_H_ */

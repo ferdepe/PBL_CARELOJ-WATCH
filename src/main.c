@@ -18,6 +18,7 @@
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
 #include "tareaPantalla.h"
+#include "gic_arm.h"
 #include "timer_scugic.h"
 #include "Timer_TTC.h"
 #include "Adc.h"
@@ -27,8 +28,10 @@
 
 int main()
 {
-	HAL_TIMER_SCUGIC_initTimer(1000);
-	HAL_TIMER_TTC_initTimer();
+	HAL_GIC_SetupInterruptSystem();
+	HAL_TIMER_SCUGIC_TimerSetup(1);
+	HAL_TIMER_TTC_TimerSetup(1);
+	HAL_GIC_EnableProcessorARMInterrupt();
     HAL_ADC_Init();
     HAL_DISPLAY_init();
 

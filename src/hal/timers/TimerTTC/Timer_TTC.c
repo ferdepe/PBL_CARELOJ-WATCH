@@ -1,103 +1,43 @@
-
 /**
- * @file      Timer.c
- * @brief     Implementacion de la logica del timer e interrupciones.
+ * @file      timer_ttc.c
+ * @brief     Short description.
  * @par		  Descripción de la función:
  * 			  par1
  *            par2
- * @author    Mikel Etxebeste
- * @date      18/05/2016
+ * @author    F.Domínguez
+ * @date      dd/mm/yyyy
  * @version   1.0
- * @todo      todo
- * @bug       bug
  */
 
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
 
-#include <stdio.h>
-//#include "platform.h"
-#include "Xscugic.h"
-#include "xscutimer.h"
-#include "xttcps.h"
-#include "xparameters.h"
-#include "Timer_TTC.h"
-#include "xil_types.h"
-#include "Xil_exception.h"
+#include "timer_ttc.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
-
-#define TTC_DEVICE_ID       XPAR_XTTCPS_0_DEVICE_ID
-#define TTC_INTR_ID         XPAR_XTTCPS_0_INTR
-#define INTC_DEVICE_ID      XPAR_SCUGIC_SINGLE_DEVICE_ID
-
-//#define TIMER_DEVICE_ID XPAR_XSCUTIMER_0_DEVICE_ID
-//#define INTC_DEVICE_ID XPAR_SCUGIC_SINGLE_DEVICE_ID
-//#define TIMER_IRPT_INTR XPAR_SCUTIMER_INTR
-//#define TIMER_LOAD_VALUE (10*(XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / 2))
+#define TTC_TICK_DEVICE_ID	XPAR_XTTCPS_0_DEVICE_ID
+#define TTC_TICK_INTR_ID	XPAR_XTTCPS_0_INTR
 
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
- /**
- * @struct     TmrCntrSetup
- * @brief      Estructura definida mayormente para indicar la frecuencia de interrupcion del timer y en que opción se va usar.
- * @par        Descripción:
- *             - OutputHz: Frecuencia de salida
- *             - Interval: Valor del intervalo
- *             - Prescaler: Valor del prescalar.
- *             - Options: opciones de setting del timer.
- * @author     author
- * @date       dd/mm/yyyy
-*/
-typedef struct
-{
-            u32 OutputHz;           /* Output frequency */
-            u16 Interval;           /* Interval value */
-            u8 Prescaler;           /* Prescaler value */
-            u16 Options;            /* Option settings */
+
+typedef struct {
+	u32 OutputHz;	/* Output frequency */
+	u16 Interval;	/* Interval value */
+	u8 Prescaler;	/* Prescaler value */
+	u16 Options;	/* Option settings */
 } TmrCntrSetup;
 
 /*****************************************************
 *           PROTOTYPES OF LOCAL FUNCTIONS            *
 *****************************************************/
 
-/**
- * @fn         SetupInterruptSystemTTC
- * @brief      Es el Set Up para que la interrupción del timer se inicialice.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[1]   XScuGic *PunteroAlaInstancia
- * @param[2]   XTtcPs *PunteroDeLaInterrupcion.
- * @author     Mikel Etxebeste
- * @date       18/05/2016
- **/
-static void SetupInterruptSystemTTC(XScuGic *GicInstancePtr, XTtcPs *TtcPsInt);
-/**
- * @fn         TickHandler
- * @brief      Es el código que se hace cuando salta la interrupción.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @param[1]  void CallBack de la función
- * @author     Mikel Etxebeste
- * @date       18/05/2016
- **/
+static int SetupTimer(int DeviceID);
 static void TickHandler(void *CallBackRef);
-/**
- * @fn         Empezar_Timer
- * @brief      Es el Set Up para que la interrupción del timer se inicialice.
- * @par		   Descripción de la función:
- * 			   par1
- *             par2
- * @author     Mikel Etxebeste
- * @date       18/05/2016
- **/
-void Empezar_Timer();
 
 /*****************************************************
 *                EXPORTED VARIABLES                  *
@@ -106,125 +46,146 @@ void Empezar_Timer();
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
 *****************************************************/
-/**
-* @var       Intc
-* @brief     Instancia al sistema de interrupcion.
-* @author    Mikel Etxebeste
-* @date      18/05/2016
-*/
-static XScuGic Intc;
-/**
-* @var       cnt
-* @brief     Counter para contar el numero de interrupciones.
-* @author    Mikel Etxebeste
-* @date      18/05/2016
-*/
-static int cnt = 0;
-/**
-* @var       Timer
-* @brief     Instancia para utilizar el Timer.
-* @author    Mikel Etxebeste
-* @date      18/05/2016
-*/
-XTtcPs Timer;
+
+XScuGic IntcInstance;
+static XTtcPs TtcPsInst;
+static TmrCntrSetup SettingsTable;
+
+static int CountTimerTTC;
 
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 
-void HAL_TIMER_TTC_initTimer(){
-
-	static TmrCntrSetup SettingsTable[1] =
-	{
-	            {1, 10, 0, 0},           /* Ticker timer counter initial setup, only output freq */
-	};
-
-	long int delay, ust_limit = 83333323;
-	int i, Status;
-
-	XTtcPs_Config *Config;
+int HAL_TIMER_TTC_TimerSetup(unsigned int nHz)
+{
+	int Status;
 	TmrCntrSetup *TimerSetup;
+	XTtcPs *TtcPsTick;
 
+	SettingsTable.OutputHz = nHz;
 
-	TimerSetup = &SettingsTable[TTC_DEVICE_ID];
-	XTtcPs_Stop(&Timer);
-	XTtcPs_ResetCounterValue(&Timer);
+	TimerSetup = &SettingsTable;
 
-	printf("Microcarsil Timer TCC \n\r");
+	/*
+	 * Set up appropriate options for Ticker: interval mode without
+	 * waveform output.
+	 */
+	TimerSetup->Options |= (XTTCPS_OPTION_INTERVAL_MODE |
+					      XTTCPS_OPTION_WAVE_DISABLE);
 
-	//initialise the timer
-	Config = XTtcPs_LookupConfig(TTC_DEVICE_ID);
-	XTtcPs_CfgInitialize(&Timer, Config, Config->BaseAddress);
+	/*
+	 * Calling the timer setup routine
+	 *  . initialize device
+	 *  . set options
+	 */
+	Status = SetupTimer(TTC_TICK_DEVICE_ID);
+	if(Status != XST_SUCCESS) {
+		return Status;
+	}
 
-	TimerSetup->Options |= (XTTCPS_OPTION_INTERVAL_MODE | XTTCPS_OPTION_WAVE_DISABLE);
+	TtcPsTick = &TtcPsInst;
 
-	XTtcPs_SetOptions(&Timer, TimerSetup->Options);
-	XTtcPs_CalcIntervalFromFreq(&Timer, TimerSetup->OutputHz,&(TimerSetup->Interval), &(TimerSetup->Prescaler));
+	/*
+	 * Connect to the interrupt controller
+	 */
+	Status = HAL_GIC_ConnectIntRoutine(TTC_TICK_INTR_ID,
+		(Xil_ExceptionHandler)TickHandler, (void *)TtcPsTick);
+	if (Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
 
-	XTtcPs_SetInterval(&Timer, TimerSetup->Interval);
-	XTtcPs_SetPrescaler(&Timer, TimerSetup->Prescaler);
+	/*
+	 * Enable the interrupt for the Timer counter
+	 */
+	HAL_GIC_EnableIntForDevice(TTC_TICK_INTR_ID);
 
-	SetupInterruptSystemTTC(&Intc, &Timer);
+	/*
+	 * Enable the interrupts for the tick timer/counter
+	 * We only care about the interval timeout.
+	 */
+	XTtcPs_EnableInterrupts(TtcPsTick, XTTCPS_IXR_INTERVAL_MASK);
 
-	Empezar_Timer();
+	/*
+	 * Start the tick timer/counter
+	 */
+	XTtcPs_Start(TtcPsTick);
+
+	return Status;
 }
 
-unsigned int HAL_TIMER_TTC_getCount(){
-	return cnt;
+int HAL_TIMER_TTC_GetTimerCount(void){
+	return CountTimerTTC;
 }
+
+
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/
-
-
-void Empezar_Timer(){
-
-	XTtcPs_Start(&Timer);
-
-	 //XScuTimer_Start(&Timer);
-
-}
-
-static void SetupInterruptSystemTTC(XScuGic *GicInstancePtr, XTtcPs *TtcPsInt)
+static int SetupTimer(int DeviceID)
 {
+	int Status;
+	XTtcPs_Config *Config;
+	XTtcPs *Timer;
+	TmrCntrSetup *TimerSetup;
 
-            XScuGic_Config *IntcConfig; //GIC config
-            Xil_ExceptionInit();
+	TimerSetup = &SettingsTable;
 
-            //initialise the GIC
-            IntcConfig = XScuGic_LookupConfig(INTC_DEVICE_ID);
+	Timer = &TtcPsInst;
+	/*
+	 * Stop the timer first
+	 */
+	XTtcPs_Stop(Timer);
 
-            XScuGic_CfgInitialize(GicInstancePtr, IntcConfig, IntcConfig->CpuBaseAddress);
+	/*
+	 * Look up the configuration based on the device identifier
+	 */
+	Config = XTtcPs_LookupConfig(DeviceID);
+	if (NULL == Config) {
+		return XST_FAILURE;
+	}
 
-            //connect to the hardware
-            Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,(Xil_ExceptionHandler)XScuGic_InterruptHandler, GicInstancePtr);
+	/*
+	 * Initialize the device
+	 */
+	Status = XTtcPs_CfgInitialize(Timer, Config, Config->BaseAddress);
+	if (Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
 
-            XScuGic_Connect(GicInstancePtr, TTC_INTR_ID,(Xil_ExceptionHandler)TickHandler, (void *)TtcPsInt);
+	/*
+	 * Set the options
+	 */
+	XTtcPs_SetOptions(Timer, TimerSetup->Options);
 
+	/*
+	 * Timer frequency is preset in the TimerSetup structure,
+	 * however, the value is not reflected in its other fields, such as
+	 * IntervalValue and PrescalerValue. The following call will map the
+	 * frequency to the interval and prescaler values.
+	 */
+	XTtcPs_CalcIntervalFromFreq(Timer, TimerSetup->OutputHz,
+		&(TimerSetup->Interval), &(TimerSetup->Prescaler));
 
-            XScuGic_Enable(GicInstancePtr, TTC_INTR_ID);
-            XTtcPs_EnableInterrupts(TtcPsInt, XTTCPS_IXR_INTERVAL_MASK);
+	/*
+	 * Set the interval and prescale
+	 */
+	XTtcPs_SetInterval(Timer, TimerSetup->Interval);
+	XTtcPs_SetPrescaler(Timer, TimerSetup->Prescaler);
 
-            //XTtcPs_Start(TtcPsInt);
-
-            // Enable interrupts in the Processor.
-            Xil_ExceptionEnableMask(XIL_EXCEPTION_IRQ);
+	return XST_SUCCESS;
 }
-
 
 static void TickHandler(void *CallBackRef)
 {
-            u32 StatusEvent;
-            //static int cntinterno = 0;
-            StatusEvent = XTtcPs_GetInterruptStatus((XTtcPs *)CallBackRef);
-            XTtcPs_ClearInterruptStatus((XTtcPs *)CallBackRef, StatusEvent);
+	u32 StatusEvent;
 
-            //printf("cnt = %d\n\r", cnt++);
-            cnt++;
+	/*
+	 * Read the interrupt status, then write it back to clear the interrupt.
+	 */
+	StatusEvent = XTtcPs_GetInterruptStatus((XTtcPs *)CallBackRef);
+	XTtcPs_ClearInterruptStatus((XTtcPs *)CallBackRef, StatusEvent);
 
-            //XTtcPs_Start(&Timer);
+	CountTimerTTC++;
 
 }
-
-
-
