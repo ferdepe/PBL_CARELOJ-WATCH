@@ -23,17 +23,18 @@
 #include "Adc.h"
 #include "axi-gpio.h"
 #include "pantalla.h"
+#include "display.h"
 
 int main()
 {
 	HAL_TIMER_SCUGIC_initTimer(1000);
-HAL_TIMER_TTC_initTimer();
-HAL_ADC_Init();	while(1){
+	HAL_TIMER_TTC_initTimer();
+    HAL_ADC_Init();
+    HAL_DISPLAY_init();
+
+    while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();
-		
-		
-	    
 	    APP_TAREAPANTALLA_ejecutaTarea();
 	}
     return 0;

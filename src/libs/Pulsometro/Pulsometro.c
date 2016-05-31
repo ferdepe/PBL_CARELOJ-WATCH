@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include "Adc.h"
+#include "Timer_TTC.h"
 #include "Pulsometro.h"
 
 /*****************************************************
@@ -61,7 +62,7 @@ void PULSOMETRO_CalculoXMinuto();
  * @author     Mikel Etxebeste
  * @date       18/05/2016
  **/
-static int PULSOMETRO_SysMonFractionToInt(float FloatNum);
+//static int PULSOMETRO_SysMonFractionToInt(float FloatNum);
 
 /*****************************************************
 *                EXPORTED VARIABLES                  *
@@ -119,7 +120,10 @@ while(cnt==cnt1){
 
 void PULSOMETRO_ContadorDePulsos(){
 	//u32 TempRawData,VccIntRawData,ExtVolRawData,i;
-	float TempData,VccIntData,ExtVolData,NewExtVolData = 0 , New;
+	//float TempData;
+	//float VccIntData;
+	float ExtVolData;
+	float New;
 	static float Old = 0;
  	static float MAX = 0, MIN = 100;
 	float  x;
@@ -165,6 +169,7 @@ void PULSOMETRO_CalculoXMinuto(){
 
 }
 
+/*
 int PULSOMETRO_SysMonFractionToInt(float FloatNum){
 	float Temp;
 	Temp = FloatNum;
@@ -173,3 +178,4 @@ int PULSOMETRO_SysMonFractionToInt(float FloatNum){
 	}
 	return( ((int)((Temp -(float)((int)Temp)) * (1000.0f))));
 }
+*/
