@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 #include "Adc.h"
-#include "Timer_TTC.h"
+#include "timer_ttc.h"
 #include "Pulsometro.h"
 
 /*****************************************************

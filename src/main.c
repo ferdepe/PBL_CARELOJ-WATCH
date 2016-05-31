@@ -20,7 +20,7 @@
 #include "tareaPantalla.h"
 #include "gic_arm.h"
 #include "timer_scugic.h"
-#include "Timer_TTC.h"
+#include "timer_ttc.h"
 #include "Adc.h"
 #include "axi-gpio.h"
 #include "pantalla.h"

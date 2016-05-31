@@ -19,8 +19,8 @@
 //#include "platform.h"
 #include "xsysmon.h"
 #include "xil_types.h"
-#include "Xil_exception.h"
-#include "Timer_TTC.h"
+#include "xil_exception.h"
+#include "timer_ttc.h"
 #include "Adc.h"
 
 /*****************************************************

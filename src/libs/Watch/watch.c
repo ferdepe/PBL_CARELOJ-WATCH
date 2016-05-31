@@ -15,7 +15,7 @@
 *****************************************************/
 #include <stdio.h>
 #include "display.h"
-#include "timer_scugic.h"
+#include "timer_ttc.h"
 
 #include "watch.h"
 /*****************************************************
