@@ -18,21 +18,26 @@
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
 #include "tareaPantalla.h"
+#include "gic_arm.h"
 #include "timer_scugic.h"
+#include "Timer_TTC.h"
+#include "Adc.h"
 #include "axi-gpio.h"
 #include "dataDisplay.h"
+#include "display.h"
 
 int main()
 {
-	APP_PANTALLA_init();
-	HAL_TIMER_SCUGIC_initTimer(1000);
-	APP_DATA_SENSORS_setSensorData(1,65.5);
-	APP_DATA_SENSORS_setSensorData(2,77.8);
-	APP_DATA_SENSORS_setSensorData(3,90);
-	while(1){
+	HAL_GIC_SetupInterruptSystem();
+	HAL_TIMER_SCUGIC_TimerSetup(1);
+	HAL_TIMER_TTC_TimerSetup(1);
+	HAL_GIC_EnableProcessorARMInterrupt();
+    HAL_ADC_Init();
+    HAL_DISPLAY_init();
+
+    while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();
-		LIBS_WATCH_updateTime();
 	    APP_TAREAPANTALLA_ejecutaTarea();
 	}
     return 0;

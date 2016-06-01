@@ -59,7 +59,7 @@ void LIBS_WATCH_setTime( T_TIME time )
 
 void LIBS_WATCH_updateTime()
 {
-	countA = HAL_TIMER_SCUGIC_getTimerCount();
+	countA = HAL_TIMER_TTC_GetTimerCount();
 	if (countB != countA)
 	{
 		actualTime.seg++;

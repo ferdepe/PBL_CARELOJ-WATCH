@@ -39,15 +39,11 @@
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 void APP_FUNCIONESENVIO_initChannel(void){
-//	init_platform();
-}
+	//init_platform();
+	}
 
 void APP_FUNCIONESENVIO_send(char * str_id, char * data){
 
-	xil_printf(str_id);
-	xil_printf(": ");
-	xil_printf(data);
-	xil_printf("\r\n");
 }
 void APP_FUNCIONESENVIO_receive(char * data){
 

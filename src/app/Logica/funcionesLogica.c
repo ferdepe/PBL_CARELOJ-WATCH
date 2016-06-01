@@ -19,10 +19,12 @@
 *****************************************************/
 #include "funcionesLogica.h"
 #include "axi-gpio.h"
-#include "timer_scugic.h"
+#include "timer_ttc.h"
 #include "dataSensors.h"
+
 #include "dataEmergency.h"
 #include "dataDisplay.h"
+#include "Pulsometro.h"
 #include "config.h"
 
 /*****************************************************
@@ -182,7 +184,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readGreenButton(){
 BOOLEAN APP_FUNCIONESLOGICA_E_after10s(){
 	unsigned int cont = 0;
 
-	cont = HAL_TIMER_SCUGIC_getTimerCount();
+	cont = HAL_TIMER_TTC_GetTimerCount();
 	if ((cont - contadorTimer) >= 20)
 		return 1;
 	else
@@ -286,7 +288,7 @@ void APP_FUNCIONESLOGICA_A_setContador(unsigned int *cont, unsigned char nOperac
  * @date       24/03/2016
 */
 void APP_FUNCIONESLOGICA_ENT_getTimerCount(){
-	contadorTimer = HAL_TIMER_SCUGIC_getTimerCount();
+	contadorTimer = HAL_TIMER_TTC_GetTimerCount();
 }
 
 /**
@@ -324,10 +326,15 @@ void APP_FUNCIONESLOGICA_DO_getData(){
 	/*
 	 * INSERTAR AQUÍ FUNCIÓN DE REGOGIDA DE DATOS
 	 */
+	unsigned int BPM;
+	BPM = LIBS_PULSOMETRO_GetBPM();
 
-	APP_DATA_SENSORS_setSensorData(PULSOMETRO, 130.0);
+
+	APP_DATA_SENSORS_setSensorData(PULSOMETRO, /*130.0*/ BPM);
+	
 	APP_DATA_SENSORS_setSensorData(BASCULA, 75);
-
+	
+	
 	endGetData = APP_DATA_SENSORS_dataReady();
 }
 /*****************************************************
