@@ -94,7 +94,7 @@ void APP_PANTALLA_screenClock()
 	T_TIME tiempo;
 	tiempo=LIBS_WATCH_getTime();
 	sprintf(strT, "TIEMPO\n");
-	sprintf( strV, "%2d::%2d::%2d", tiempo.hour, tiempo.min, tiempo.seg);
+	sprintf(strV, "%2d::%2d::%2d", tiempo.hour, tiempo.min, tiempo.seg);
 	sprintf(strU, "\0");
 	HAL_DISPLAY_screen(strT,strV,strU);
 }

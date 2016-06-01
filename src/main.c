@@ -20,7 +20,7 @@
 #include "tareaPantalla.h"
 #include "timer_scugic.h"
 #include "axi-gpio.h"
-#include "pantalla.h"
+#include "dataDisplay.h"
 
 int main()
 {
@@ -32,6 +32,7 @@ int main()
 	while(1){
 		APP_TAREALOGICA_ejecutaTarea();
 		APP_TAREAENVIO_ejecutaTarea();
+		LIBS_WATCH_updateTime();
 	    APP_TAREAPANTALLA_ejecutaTarea();
 	}
     return 0;
