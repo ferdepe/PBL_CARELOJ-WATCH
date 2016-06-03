@@ -7,7 +7,7 @@
  * @author    Javier Barragán
  * @date      02/06/2016
  * @version   1.0
- * @todo	  modularizar mas la librería.
+ * @todo	  hacer mas configurable la librería.
  * @bug
  */
 

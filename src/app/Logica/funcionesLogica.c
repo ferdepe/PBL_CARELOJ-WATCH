@@ -8,9 +8,7 @@
  * @date    04/03/2015
  * @version 1.0
  * @todo    Función entry del getTimerCount
- * @todo    Cambiar pines entre Acelerómetro y botón Recogida datos
  * @todo    Contador timer a 2 segundos, cambiarlo a 10 como en esquema
- * @todo    Acelerómetro simulado por botón
  * @bug     Variables globales avisoEnBuffer y endGetData no se resetean.
  */
 
@@ -25,6 +23,7 @@
 #include "dataEmergency.h"
 #include "dataDisplay.h"
 #include "Pulsometro.h"
+#include "acelerometro.h"
 #include "config.h"
 
 /*****************************************************
@@ -85,7 +84,7 @@ BOOLEAN APP_FUNCIONESLOGICA_E_readAcelerometer(){
 	unsigned int pinActual;
 	BOOLEAN ret;
 
-	pinActual = HAL_AXI_GPIO_readAxiButtonPin(0);
+	pinActual = HAL_ACELEROMETRO_getEstadoCaida();
 
 	if(pinActual && !pinAnterior)
 		ret = 1;
