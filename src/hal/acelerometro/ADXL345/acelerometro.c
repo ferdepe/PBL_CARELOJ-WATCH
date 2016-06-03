@@ -8,6 +8,7 @@
  * @date      02/06/2016
  * @version   1.0
  * @todo	  hacer mas configurable la librería.
+ * @todo	  modularizar mas la librería.
  * @bug
  */
 
