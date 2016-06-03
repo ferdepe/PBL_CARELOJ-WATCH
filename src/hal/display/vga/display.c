@@ -68,7 +68,7 @@ void HAL_DISPLAY_screen(char strT[], char strV[], char strU[])
 }
 void HAL_DISPLAY_printString(char str[], char tipo)
 {
-	int	 i, y,x0;
+	int	 i, y, x0;
 	if (tipo=='T' ) y = 230;//titulo
 	if (tipo=='V' ) y = 240;//valor
 	if (tipo=='U' ) y = 250;//unidad

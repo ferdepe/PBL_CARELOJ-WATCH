@@ -113,6 +113,7 @@ void APP_PANTALLA_screenClock()
 void APP_PANTALLA_screenSensor(unsigned int Id)
 {
 	DATAMANAGEMENT_SENSOR_DATA SENSOR;
+
 	SENSOR=APP_DATA_SENSORS_getSensorData(Id);
 	APP_PANTALLA_printTipo(Id);
 	APP_PANTALLA_printValor(SENSOR.value);
