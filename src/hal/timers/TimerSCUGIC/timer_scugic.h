@@ -36,7 +36,7 @@
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
 
-int HAL_TIMER_SCUGIC_TimerSetup(int nHz);
+int HAL_TIMER_SCUGIC_TimerSetup(void);
 int HAL_TIMER_SCUGIC_GetTimerCount(void);
 
 /*****************************************************

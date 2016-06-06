@@ -15,11 +15,19 @@
 
 #include "timer_scugic.h"
 
+#include "xparameters.h"
+#include "xparameters_ps.h"	/* defines XPAR values */
+#include "xil_cache.h"
+#include "lwip/tcp.h"
+#include "netif/xadapter.h"
+
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
 #define TIMER_DEVICE_ID		XPAR_XSCUTIMER_0_DEVICE_ID
 #define TIMER_IRPT_INTR		XPAR_SCUTIMER_INTR
+
+#define RESET_RX_CNTR_LIMIT	400
 
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
@@ -31,6 +39,8 @@
 
 static int InterruptSetup(void);
 static void TimerIntrHandler(void *CallBackRef);
+void tcp_fasttmr(void);
+void tcp_slowtmr(void);
 
 /*****************************************************
 *                EXPORTED VARIABLES                  *
@@ -44,13 +54,19 @@ XScuGic IntcInstance;
 XScuTimer TimerInstance;
 static int CountTimerSCUGIC;
 
+#ifndef USE_SOFTETH_ON_ZYNQ
+static int ResetRxCntr = 0;
+extern struct netif host_netif;
+#endif
+
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 
-int HAL_TIMER_SCUGIC_TimerSetup(int nHz){
+int HAL_TIMER_SCUGIC_TimerSetup(void){
 
 	int Status;
+	int TimerLoadValue = 0;
 
 	XScuTimer_Config *ConfigPtr;
 
@@ -87,8 +103,11 @@ int HAL_TIMER_SCUGIC_TimerSetup(int nHz){
 	/*
 	 * Load the timer counter register.
 	 */
-
-	XScuTimer_LoadTimer(&TimerInstance, XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / (2*nHz));
+	/*
+	 * Set for 250 milli seconds timeout.
+	 */
+	TimerLoadValue = XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / 8;
+	XScuTimer_LoadTimer(&TimerInstance, TimerLoadValue);
 
 	/*
 	 * Start the timer counter and then wait for it
@@ -147,7 +166,34 @@ static void TimerIntrHandler(void *CallBackRef)
 	 * of the timer counter that expired, increment a shared variable so
 	 * the main thread of execution can see the timer expired.
 	 */
+	 /* we need to call tcp_fasttmr & tcp_slowtmr at intervals specified
+	 * by lwIP. It is not important that the timing is absoluetly accurate.
+	 */
+	static int odd = 1;
 
+	odd = !odd;
+#ifndef USE_SOFTETH_ON_ZYNQ
+	ResetRxCntr++;
+#endif
+	tcp_fasttmr();
+	if (odd) {
+		tcp_slowtmr();
+	}
+
+	/* For providing an SW alternative for the SI #692601. Under heavy
+	 * Rx traffic if at some point the Rx path becomes unresponsive, the
+	 * following API call will ensures a SW reset of the Rx path. The
+	 * API xemacpsif_resetrx_on_no_rxdata is called every 100 milliseconds.
+	 * This ensures that if the above HW bug is hit, in the worst case,
+	 * the Rx path cannot become unresponsive for more than 100
+	 * milliseconds.
+	 */
+#ifndef USE_SOFTETH_ON_ZYNQ
+	if (ResetRxCntr >= RESET_RX_CNTR_LIMIT) {
+		xemacpsif_resetrx_on_no_rxdata(&host_netif);
+		ResetRxCntr = 0;
+	}
+#endif
 	CountTimerSCUGIC++;
 	XScuTimer_ClearInterruptStatus(TimerInstancePtr);
 
