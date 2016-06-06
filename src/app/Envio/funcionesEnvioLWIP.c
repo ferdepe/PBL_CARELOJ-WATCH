@@ -14,7 +14,11 @@
 *                   MODULES USED                     *
 *****************************************************/
 #include "funcionesEnvio.h"
-//#include "platform.h"
+#include "timer_scugic.h"
+#include "lwip_tcp.h"
+
+#include "netif/xadapter.h"
+
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
@@ -34,20 +38,27 @@
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
 *****************************************************/
+struct netif host_netif;
+struct netif *time_netif;
 
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
 void APP_FUNCIONESENVIO_initChannel(void){
-	//init_platform();
+	HAL_TIMER_SCUGIC_TimerSetup();
+	HAL_LWIP_TCP_init();
+
 	}
 
-void APP_FUNCIONESENVIO_send(char * str_id, char * data){
-
+void APP_FUNCIONESENVIO_send(char * str_id, int len){
+	HAL_LWIP_TCP_setBuffEnvio(str_id,len);
+	HAL_LWIP_TCP_launchClient();
 }
-void APP_FUNCIONESENVIO_receive(char * data){
 
+void APP_FUNCIONESENVIO_refresh(void){
+	HAL_LWIP_TCP_refreshIO();
 }
+
 
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *

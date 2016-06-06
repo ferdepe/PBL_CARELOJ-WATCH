@@ -45,6 +45,10 @@
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
+void APP_TAREAENVIO_init(void){
+	APP_FUNCIONESENVIO_initChannel();
+}
+
 /**
  * @fn      void APP_TAREAENVIO_ejecutaTarea(void)
  * @brief   Función que llama a la ejecución de la tarea que atiende al envío
@@ -57,22 +61,28 @@
 */
 void APP_TAREAENVIO_ejecutaTarea(void){
 
-	int isData = 0;
-	unsigned char bufferDatosSensores[3];
-	unsigned char bufferDatosEmergencia[3];
+	DATAMANAGEMENT_DATA_SEND dataToSend;
+	DATAMANAGEMENT_EMERGENCY_SEND emergencyToSend;
+	unsigned int len_datos = sizeof(DATAMANAGEMENT_DATA_SEND);
+	unsigned int len_emergencia = sizeof(DATAMANAGEMENT_EMERGENCY_SEND);
 
 
-	isData = 1;
-	if (isData){
+	if (APP_DATA_SENSORS_dataReady()){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR INTERNET
-		APP_FUNCIONESENVIO_send("Datos de Sensor",bufferDatosSensores);
+		dataToSend = APP_DATA_SENSORS_getDataToSend();
+		APP_FUNCIONESENVIO_send((char*)&dataToSend, len_datos);
+		APP_DATA_SENSORS_dataSent();
+
 	}
 
-	isData = 1;
-	if (isData){
+	if (APP_DATA_EMERGENCY_dataReady()){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR GPRS
-		APP_FUNCIONESENVIO_send("Datos de Emergencia",bufferDatosEmergencia);
+		emergencyToSend = APP_DATA_EMERGENCY_getDataToEmergency();
+		APP_FUNCIONESENVIO_send((char*)&emergencyToSend, len_emergencia);
+		APP_DATA_EMERGENCY_emergencySent();
 	}
+
+	APP_FUNCIONESENVIO_refresh();
 }
 
 /*****************************************************

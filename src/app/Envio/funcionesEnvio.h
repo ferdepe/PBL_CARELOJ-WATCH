@@ -32,8 +32,8 @@
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
 void APP_FUNCIONESENVIO_initChannel(void);
-void APP_FUNCIONESENVIO_send(char * str_id, char * data);
-void APP_FUNCIONESENVIO_receive(char * data);
+void APP_FUNCIONESENVIO_send(char * str_id, int len);
+void APP_FUNCIONESENVIO_refresh(void);
 
 /*****************************************************
 *                        EOF                         *

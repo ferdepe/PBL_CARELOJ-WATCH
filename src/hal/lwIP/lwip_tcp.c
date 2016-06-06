@@ -112,7 +112,6 @@ void HAL_LWIP_TCP_refreshIO(void){
 //LOCALES
 err_t recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err){
 	char *pc;
-	char env[sizeof(DATAMANAGEMENT_DATA_SEND)];
 	int i = 0;
 	int len = 0;
 	/* do not read the packet if we are not in ESTABLISHED state */
