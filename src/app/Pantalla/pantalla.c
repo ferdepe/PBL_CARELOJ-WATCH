@@ -94,7 +94,7 @@ void APP_PANTALLA_screenClock()
 	T_TIME tiempo;
 	tiempo=LIBS_WATCH_getTime();
 	sprintf(strT, "TIEMPO\n");
-	sprintf( strV, "%2d::%2d::%2d", tiempo.hour, tiempo.min, tiempo.seg);
+	sprintf(strV, "%2d::%2d::%2d", tiempo.hour, tiempo.min, tiempo.seg);
 	sprintf(strU, "\0");
 	HAL_DISPLAY_screen(strT,strV,strU);
 }
@@ -113,10 +113,11 @@ void APP_PANTALLA_screenClock()
 void APP_PANTALLA_screenSensor(unsigned int Id)
 {
 	DATAMANAGEMENT_SENSOR_DATA SENSOR;
+
 	SENSOR=APP_DATA_SENSORS_getSensorData(Id);
-	APP_PANTALLA_printTipo(SENSOR.nId);
+	APP_PANTALLA_printTipo(Id);
 	APP_PANTALLA_printValor(SENSOR.value);
-	APP_PANTALLA_printUnidad(SENSOR.nId);
+	APP_PANTALLA_printUnidad(Id);
 	HAL_DISPLAY_screen(strT,strV,strU);
 }
 

@@ -23,8 +23,9 @@
 #include "timer_ttc.h"
 #include "Adc.h"
 #include "axi-gpio.h"
-#include "pantalla.h"
+#include "dataDisplay.h"
 #include "display.h"
+#include "acelerometro.h"
 
 int main()
 {
@@ -34,6 +35,7 @@ int main()
 	HAL_GIC_EnableProcessorARMInterrupt();
     HAL_ADC_Init();
     HAL_DISPLAY_init();
+    HAL_ACELEROMETRO_init();
 
     while(1){
 		APP_TAREALOGICA_ejecutaTarea();
