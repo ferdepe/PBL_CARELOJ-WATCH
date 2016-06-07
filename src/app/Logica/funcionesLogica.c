@@ -81,7 +81,7 @@ static unsigned int endGetData = 0;
 */
 BOOLEAN APP_FUNCIONESLOGICA_E_readAcelerometer(){
 	static unsigned int pinAnterior = 0;
-	unsigned int pinActual;
+	unsigned int pinActual = 0;
 	BOOLEAN ret;
 
 	pinActual = HAL_ACELEROMETRO_getEstadoCaida();
@@ -306,9 +306,10 @@ void APP_FUNCIONESLOGICA_DO_protocoloEmergencia(){
 	 * INSERTAR AQUÍ FUNCIÓN QUE LLAMA A RECOGER DATOS EMERGENCIA
 	 */
 	GPS_DATA gpsValues = {30,45,23.0,12,33,30.2};
-	float fPulsaciones = 220.0;
+	unsigned int BPM;
+	BPM = LIBS_PULSOMETRO_GetBPM();
 
-	APP_DATA_EMERGENCY_setDataToEmergency(fPulsaciones, gpsValues);
+	APP_DATA_EMERGENCY_setDataToEmergency(BPM, gpsValues);
 	avisoEnBuffer = APP_DATA_EMERGENCY_dataReady();
 }
 
