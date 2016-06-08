@@ -1,15 +1,16 @@
 /**
- * @file    tareaEnvio.h
- * @brief   Cabecera con la declaración de las funciones para envío de datos
- * @par		Descripción de la función
- * @author  J. Barragán
+ * @file    funcionesEnvio.h
+ * @brief   Declaración de las funciones que para realizar las tareas de comunicación
+ * @par		Objetivo:
+ *			Este header se enfoca a la portabilidad del código. Los nombres de las funciones
+ *			y su funcionalidad serán siempre las mismas independientemente del protocolo.
  * @author  F. Domínguez
- * @author  M. Etxebeste
- * @date    19/02/2015
+ * @date    17/03/2015
+ * @version 1.0
  */
 
-#ifndef TAREAENVIO_H_
-#define TAREAENVIO_H_
+#ifndef FUNCIONESENVIO_H_
+#define FUNCIONESENVIO_H_
 
 /*****************************************************
 *                   MODULES USED                     *
@@ -30,10 +31,12 @@
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-void APP_TAREAENVIO_init(void);
-void APP_TAREAENVIO_ejecutaTarea(void);
+void APP_FUNCIONESENVIO_initChannel(void);
+void APP_FUNCIONESENVIO_send(char * str_id, int len);
+void APP_FUNCIONESENVIO_refresh(void);
+
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
 
-#endif /* TAREAENVIO_H_ */
+#endif /* FUNCIONESENVIO_H_ */

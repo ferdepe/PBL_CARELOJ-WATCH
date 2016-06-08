@@ -1,20 +1,23 @@
 /**
- * @file    dataBuffersAux.c
- * @brief   Fuente de las funciones para operar sobre buffers auxiliares
- * @par		Descripción de funciones:
- * 			En este ficherose implementan las funciones para poder escribir y leer sobre buffers auxiliares.
- * 			En principio, buffers circulares y variables globales
- * @version 1.5
+ * @file    funcionesEnvioUART.c
+ * @brief   Source con la implementación para mandar y recibir información por UART
+ * @par		Objetivo:
+ *			Se enfoca a la portabilidad del código. Los nombres de las funciones y su
+ *			funcionalidad serán siempre las mismas independientemente del protocolo.
+ *			En este caso se emplea el protocolo UART.
  * @author  F. Domínguez
- * @date    04/03/2015
+ * @date    17/03/2015
+ * @version 1.0
  */
 
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
+#include "funcionesEnvio.h"
+#include "timer_scugic.h"
+#include "lwip_tcp.h"
 
-#include "dataManagement.h"
-#include "config.h"
+#include "netif/xadapter.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
@@ -23,11 +26,7 @@
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
 *****************************************************/
-typedef struct{
-	char id;
-	float value;
-	unsigned char units[UNITS_STRING];
-}DATAMANAGEMENT_MEMORY;
+
 /*****************************************************
 *           PROTOTYPES OF LOCAL FUNCTIONS            *
 *****************************************************/
@@ -36,45 +35,31 @@ typedef struct{
 *                EXPORTED VARIABLES                  *
 *****************************************************/
 
-extern STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
-extern STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioEmergencia;
-extern unsigned char DATAMANAGEMENT_idPantalla;
-extern DATAMANAGEMENT_MEMORY DATAMANAGEMENT_SensorValues[MEMORY_SIZE];
-
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
 *****************************************************/
+struct netif host_netif;
+struct netif *time_netif;
 
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
+void APP_FUNCIONESENVIO_initChannel(void){
+	HAL_TIMER_SCUGIC_TimerSetup();
+	HAL_LWIP_TCP_init();
 
-void APP_DATAMANAGEMENT_initBuffers(){
-	STATIC_CIRCULAR_BUFFER_init(&DATAMANAGEMENT_envioDatos);
-	STATIC_CIRCULAR_BUFFER_init(&DATAMANAGEMENT_envioEmergencia);
-}
-
-unsigned int APP_DATAMANAGEMENT_send2Buffer(STATIC_CIRCULAR_BUFFER *obj, unsigned char *Data, unsigned int len){
-	int ret = 0;
-
-	ret = STATIC_CIRCULAR_BUFFER_insertChars(obj,Data,len);
-
-	return ret;
-}
-
-unsigned int APP_DATAMANAGEMENT_readFromBuffer(STATIC_CIRCULAR_BUFFER * obj, unsigned char *str_read){
-	int stringOK =0;
-
-	stringOK = STATIC_CIRCULAR_BUFFER_existChar(obj,'$');
-
-	if(stringOK){
-		stringOK = STATIC_CIRCULAR_BUFFER_readChars(obj, str_read);
 	}
 
-	return stringOK;
+void APP_FUNCIONESENVIO_send(char * str_id, int len){
+	HAL_LWIP_TCP_setBuffEnvio(str_id,len);
+	HAL_LWIP_TCP_launchClient();
 }
+
+void APP_FUNCIONESENVIO_refresh(void){
+	HAL_LWIP_TCP_refreshIO();
+}
+
 
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
 *****************************************************/
-

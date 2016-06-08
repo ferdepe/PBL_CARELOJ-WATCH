@@ -1,19 +1,23 @@
 /**
- * @file    tareaEnvio.h
- * @brief   Cabecera con la declaración de las funciones para envío de datos
- * @par		Descripción de la función
- * @author  J. Barragán
- * @author  F. Domínguez
- * @author  M. Etxebeste
- * @date    19/02/2015
+ * @file      timer_ttc.h
+ * @brief     Short description.
+ * @par		  Descripción de la función:
+ * 			  par1
+ *            par2
+ * @author    author
+ * @date      dd/mm/yyyy
+ * @version   1.0
  */
 
-#ifndef TAREAENVIO_H_
-#define TAREAENVIO_H_
+#ifndef TIMER_TTC_H_
+#define TIMER_TTC_H_
 
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
+
+#include "xttcps.h"
+#include "gic_arm.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
@@ -30,10 +34,12 @@
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-void APP_TAREAENVIO_init(void);
-void APP_TAREAENVIO_ejecutaTarea(void);
+
+int HAL_TIMER_TTC_TimerSetup(unsigned int nHz);
+int HAL_TIMER_TTC_GetTimerCount(void);
+
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
 
-#endif /* TAREAENVIO_H_ */
+#endif /* TIMER_TTC_H_ */

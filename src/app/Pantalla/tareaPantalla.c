@@ -1,0 +1,68 @@
+ /**
+ * @file      tareaPantalla.c
+ * @brief     Fichero con las funciones externas de la tarea encargada de manejar la pantalla.
+ * @par		  Descripción de la función:
+* 			  Conjunto de funciones externas para que la logica general de la aplicación
+* 			  pueda manipular la tarea de impresión en pantalla.
+  * @author   Javier Barragán
+ * @date      24/05/2016
+ * @version   1.0
+ * @todo
+ * @bug
+ */
+
+/*****************************************************
+*                   MODULES USED                     *
+*****************************************************/
+
+#include "tareaPantalla.h"
+#include "pantalla.h"
+
+
+/*****************************************************
+*               DEFINITIONS AND MACROS               *
+*****************************************************/
+
+/*****************************************************
+*              TYPEDEFS AND STRUCTURES               *
+*****************************************************/
+
+/*****************************************************
+*           PROTOTYPES OF LOCAL FUNCTIONS            *
+*****************************************************/
+
+/*****************************************************
+*                EXPORTED VARIABLES                  *
+*****************************************************/
+
+/*****************************************************
+*                  GLOBAL VARIABLES                  *
+*****************************************************/
+
+/*****************************************************
+*                EXPORTED FUNCTIONS                  *
+*****************************************************/
+/**
+ * @fn      void APP_PANTALLA_ejecutaTarea(void)
+ * @brief   Función que llama a la ejecución de la tarea referida a la visualización en pantalla.
+ * @par		Descripción de la función:
+ * 			Esta función llama a la lógica encargada de reproducir sobre la pantalla los posibles estados.
+ * 			A través de consultar el idPantalla y los datos, reproduce una pantalla particular.
+ * @param   void
+ * @return  void
+*/
+void APP_TAREAPANTALLA_ejecutaTarea(void){
+
+	APP_PANTALLA_mostrar();
+}
+
+/*****************************************************
+*                EXPORTED VARIABLES                  *
+*****************************************************/
+
+/*****************************************************
+*                  LOCAL FUNCTIONS                   *
+*****************************************************/
+
+
+

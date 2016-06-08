@@ -1,23 +1,29 @@
 /**
- * @file    tareaEnvio.h
- * @brief   Cabecera con la declaración de las funciones para envío de datos
- * @par		Descripción de la función
- * @author  J. Barragán
- * @author  F. Domínguez
- * @author  M. Etxebeste
- * @date    19/02/2015
+ * @file      gic_arm.h
+ * @brief     Short description.
+ * @par		  Descripción del fichero:
+ * 			  par1
+ *            par2
+ * @author    F. Domínguez
+ * @date      dd/mm/yyyy
+ * @version   1.0
  */
 
-#ifndef TAREAENVIO_H_
-#define TAREAENVIO_H_
+#ifndef GIC_ARM_H_
+#define GIC_ARM_H_
 
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
 
+#include "xscugic.h"
+#include "xparameters.h"
+
 /*****************************************************
-*               DEFINITIONS AND MACROS               *
+*               DEFINITIONS AND MACROS               *j
 *****************************************************/
+
+#define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
 
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
@@ -27,13 +33,19 @@
 *                 EXPORTED VARIABLES                 *
 *****************************************************/
 
+extern XScuGic IntcInstance;		/* Interrupt Controller Instance */
+
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-void APP_TAREAENVIO_init(void);
-void APP_TAREAENVIO_ejecutaTarea(void);
+
+int HAL_GIC_SetupInterruptSystem();
+void HAL_GIC_EnableProcessorARMInterrupt();
+int HAL_GIC_ConnectIntRoutine(u32 Int_Id, Xil_InterruptHandler Handler, void *CallBackRef);
+void HAL_GIC_EnableIntForDevice(u32 Int_Id);
+
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
 
-#endif /* TAREAENVIO_H_ */
+#endif /* GIC_ARM_H_ */

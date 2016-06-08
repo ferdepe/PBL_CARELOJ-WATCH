@@ -1,13 +1,17 @@
-/*
- * HAL_axi_gpio.c
- *
- *  Created on: 19 Feb, 2016
- *      Author: Fernando
- */
+/**
+ * @file        axi-gpio.c
+ * @brief       Fuente para operar con los periféricos GPIO de la ZYNQ.
+ * @par		    Descripción de funciones:
+ * 			    Aquí se implementan las distintas funciones para operar con los periféricos GPIO implementados
+ * 			    en la placa ZYBO, como botones, switches y leds.
+ * @version     2.0
+ * @author      F. Domínguez
+ * @date        01/03/2015
+*/
 
 #include "axi-gpio.h"
 
-/*************************************************//**
+/******************************************************
  *                    INCLUDES                        *
  *****************************************************/
 
@@ -32,6 +36,13 @@
 	static XGpio Gpio_AXI;
 #endif
 
+/**
+ * @fn         HAL_AXI_GPIO_readAxiButtons(void)
+ * @brief      Función que lee el array de cuatro botones de la ZYBO y lo devuelve en cuatro bits concatenados.
+ * @ret        Data
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 unsigned int HAL_AXI_GPIO_readAxiButtons() {
 #if defined(ZYNQ_7000) &&  defined(AXI_GPIO)
 	unsigned int Data;
@@ -47,6 +58,13 @@ unsigned int HAL_AXI_GPIO_readAxiButtons() {
 #endif
 }
 
+/**
+ * @fn         HAL_AXI_GPIO_readAxiSwitches(void)
+ * @brief      Función que lee el array de cuatro switches de la ZYBO y lo devuelve en cuatro bits concatenados.
+ * @ret        Data
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 unsigned int HAL_AXI_GPIO_readAxiSwitches() {
 #if defined(ZYNQ_7000) &&  defined(AXI_GPIO)
 	unsigned int Data;
@@ -62,6 +80,13 @@ unsigned int HAL_AXI_GPIO_readAxiSwitches() {
 #endif
 }
 
+/**
+ * @fn         HAL_AXI_GPIO_readAxiButtonPin(unsigned int nPin)
+ * @brief      Función que lee el pin del boton de la ZYBO indicado por parámetro.
+ * @param[in]  unsigned int nPin
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 unsigned int HAL_AXI_GPIO_readAxiButtonPin(unsigned int nPin) {
 #if defined(ZYNQ_7000) &&  defined(AXI_GPIO)
 	unsigned int Data;
@@ -80,6 +105,13 @@ unsigned int HAL_AXI_GPIO_readAxiButtonPin(unsigned int nPin) {
 #endif
 }
 
+/**
+ * @fn         HAL_AXI_GPIO_readAxiSwitchPin(unsigned int nPin)
+ * @brief      Función que lee el pin del boton de la ZYBO indicado por parámetro.
+ * @param[in]  unsigned int nPin
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 unsigned int HAL_AXI_GPIO_readAxiSwitchPin(unsigned int nPin) {
 #if defined(ZYNQ_7000) &&  defined(AXI_GPIO)
 	unsigned int Data;
@@ -98,6 +130,14 @@ unsigned int HAL_AXI_GPIO_readAxiSwitchPin(unsigned int nPin) {
 #endif
 }
 
+/**
+ * @fn         HAL_AXI_GPIO_readAxiSwitchPin(unsigned int nPin, unsigned int nValue)
+ * @brief      Función que escribe en el pin del led de la ZYBO indicado por parámetro.
+ * @param[in]  unsigned int nPin
+ * @param[in]  unsigned int nValue
+ * @author     Fernando Domínguez
+ * @date       24/03/2016
+*/
 void HAL_AXI_GPIO_writeAxiLedPin(unsigned int nPin, unsigned int nValue) {
 #if defined(ZYNQ_7000) &&  defined(AXI_GPIO)
 	unsigned int nMask = 0x00;

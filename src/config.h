@@ -8,10 +8,10 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define UNITS_STRING 6
-#define MEMORY_SIZE 30
+#define ID_DISP 12345
 #define NUMBER_SENSORS 3 //2Sensores + 1Reloj
-
-#define LONG_TRAMA_DATOS 50
-
+typedef enum{
+PULSOMETRO = 1,
+	BASCULA,
+}CONFIG_SENSORS;
 #endif /* CONFIG_H_ */

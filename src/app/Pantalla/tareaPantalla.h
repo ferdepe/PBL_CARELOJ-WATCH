@@ -1,16 +1,18 @@
 /**
- * @file    tareaEnvio.h
- * @brief   Cabecera con la declaración de las funciones para envío de datos
- * @par		Descripción de la función
- * @author  J. Barragán
- * @author  F. Domínguez
- * @author  M. Etxebeste
- * @date    19/02/2015
+ * @file      tareaPantalla.h
+ * @brief     Header con las funciones externas de la tarea encargada de manejar la pantalla.
+ * @par		  Descripción de la función:
+* 			  Conjunto de funciones externas para que la logica general de la aplicación
+* 			  pueda manipular la tarea de impresión en pantalla.
+ * @author    Javier Barragán
+ * @date      24/05/2016
+ * @version   1.0
+ * @todo
+ * @bug
  */
 
-#ifndef TAREAENVIO_H_
-#define TAREAENVIO_H_
-
+#ifndef TAREAPANTALLA_H_
+#define TAREAPANTALLA_H_
 /*****************************************************
 *                   MODULES USED                     *
 *****************************************************/
@@ -30,10 +32,8 @@
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-void APP_TAREAENVIO_init(void);
-void APP_TAREAENVIO_ejecutaTarea(void);
+void APP_TAREAPANTALLA_ejecutaTarea(void);
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
-
-#endif /* TAREAENVIO_H_ */
+#endif /* TAREAPANTALLA_H_ */

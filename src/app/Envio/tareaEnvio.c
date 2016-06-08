@@ -17,17 +17,14 @@
 *****************************************************/
 
 #include "tareaEnvio.h"
-#include "dataManagement.h"
+#include "funcionesEnvio.h"
+#include "dataSensors.h"
+#include "dataEmergency.h"
 #include "config.h"
 
 /*****************************************************
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
-
-
-STATIC_CIRCULAR_BUFFER dataBuffer_envioDatos;
-STATIC_CIRCULAR_BUFFER dataBuffer_envioEmergencia;
-
 
 /*****************************************************
 *              TYPEDEFS AND STRUCTURES               *
@@ -40,8 +37,6 @@ STATIC_CIRCULAR_BUFFER dataBuffer_envioEmergencia;
 /*****************************************************
 *                EXPORTED VARIABLES                  *
 *****************************************************/
-STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioEmergencia;
-STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
 
 /*****************************************************
 *                  GLOBAL VARIABLES                  *
@@ -50,6 +45,10 @@ STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
 /*****************************************************
 *                EXPORTED FUNCTIONS                  *
 *****************************************************/
+void APP_TAREAENVIO_init(void){
+	APP_FUNCIONESENVIO_initChannel();
+}
+
 /**
  * @fn      void APP_TAREAENVIO_ejecutaTarea(void)
  * @brief   Función que llama a la ejecución de la tarea que atiende al envío
@@ -62,20 +61,28 @@ STATIC_CIRCULAR_BUFFER DATAMANAGEMENT_envioDatos;
 */
 void APP_TAREAENVIO_ejecutaTarea(void){
 
-	int isData = 0;
-	unsigned char bufferDatosSensores[LONG_TRAMA_DATOS];
-	unsigned char bufferDatosEmergencia[LONG_TRAMA_DATOS];
+	DATAMANAGEMENT_DATA_SEND dataToSend;
+	DATAMANAGEMENT_EMERGENCY_SEND emergencyToSend;
+	unsigned int len_datos = sizeof(DATAMANAGEMENT_DATA_SEND);
+	unsigned int len_emergencia = sizeof(DATAMANAGEMENT_EMERGENCY_SEND);
 
 
-	isData = APP_DATAMANAGEMENT_readFromBuffer(&DATAMANAGEMENT_envioDatos, bufferDatosSensores);
-	if (isData){
+	if (APP_DATA_SENSORS_dataReady()){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR INTERNET
+		dataToSend = APP_DATA_SENSORS_getDataToSend();
+		APP_FUNCIONESENVIO_send((char*)&dataToSend, len_datos);
+		APP_DATA_SENSORS_dataSent();
+
 	}
 
-	isData = APP_DATAMANAGEMENT_readFromBuffer(&DATAMANAGEMENT_envioEmergencia, bufferDatosEmergencia);
-	if (isData){
+	if (APP_DATA_EMERGENCY_dataReady()){
 		//ENVIAR DATOS A FUNCIONES DE ENVIO POR GPRS
+		emergencyToSend = APP_DATA_EMERGENCY_getDataToEmergency();
+		APP_FUNCIONESENVIO_send((char*)&emergencyToSend, len_emergencia);
+		APP_DATA_EMERGENCY_emergencySent();
 	}
+
+	APP_FUNCIONESENVIO_refresh();
 }
 
 /*****************************************************

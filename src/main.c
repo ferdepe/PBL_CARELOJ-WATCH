@@ -2,52 +2,48 @@
  * @file    main.c
  * @brief   Fichero principal
  * @par		Logica
- *			- Inizializa las tareas y el hardware
+ *			- Inicializa las tareas y el hardware
  *			- Tarea para gestionar el control de la máquina de estados del reloj
  *			- Tarea para gestionar el envío de datos del reloj al exterior
  * @par		Flujo
  * @image	html diagrama.genral.jpg
- * @author  J. Barragán
  * @author  F. Domínguez
- * @author  M. Etxebeste
  * @date    19/02/2016
  * @todo	Implementar control entre tareas
+ * @todo    Añadir tarea de control de pantalla
+ * @todo    Crear función para la inicialización
  */
 
 
 #include "tareaLogica.h"
 #include "tareaEnvio.h"
-#include "timer.h"
+#include "tareaPantalla.h"
+#include "gic_arm.h"
+#include "timer_scugic.h"
+#include "timer_ttc.h"
+#include "Adc.h"
 #include "axi-gpio.h"
-#include "dataManagement.h"
-
+#include "dataDisplay.h"
+#include "display.h"
+#include "acelerometro.h"
+#include "funcionesEnvio.h"
 
 int main()
 {
-	int count;
-	int count_ant;
-	int on = 1;
+	HAL_GIC_SetupInterruptSystem();
+	APP_TAREAENVIO_init();
+	HAL_TIMER_TTC_TimerSetup(1);
+	HAL_GIC_EnableProcessorARMInterrupt();
+    HAL_ADC_Init();
+    HAL_DISPLAY_init();
+    HAL_ACELEROMETRO_init();
 
-	APP_DATAMANAGEMENT_initBuffers();
 
-	HAL_TIMER_initTimer(100);
+    while(1){
+		APP_TAREALOGICA_ejecutaTarea();
+		APP_TAREAENVIO_ejecutaTarea();
+	    APP_TAREAPANTALLA_ejecutaTarea();
 
-
-	while(1){
-		//APP_TAREALOGICA_ejecutaTarea();
-		//APP_TAREAENVIO_ejecutaTarea();
-		count = HAL_TIMER_getTimerCount();
-		if (count - count_ant >= 100){
-			if (on = 1){
-				HAL_AXI_GPIO_writeAxiLedPin(3,on);
-				on = 0;
-			}
-			else{
-				HAL_AXI_GPIO_writeAxiLedPin(3,on);
-				on = 0;
-			}
-			count_ant = count;
-		}
 	}
     return 0;
 }

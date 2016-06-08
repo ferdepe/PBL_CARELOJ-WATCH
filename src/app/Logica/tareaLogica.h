@@ -75,6 +75,7 @@ void A_displayData(void);
 void A_displayReloj(void);
 void A_displayGet(void);
 void A_displayDataResult(void);
+void A_resetContador(void);
 
 //Para los eventos sin acción
 void A_nula(void);
@@ -84,7 +85,6 @@ void ESTADO_idle_do(void);
 void ESTADO_emergencia_do(void);
 void ESTADO_mostrando_datos_do(void);
 void ESTADO_recogiendo_datos_do(void);
-void ESTADO_accion_nula(void);
 
 void APP_TAREALOGICA_ejecutaTarea(void);
 

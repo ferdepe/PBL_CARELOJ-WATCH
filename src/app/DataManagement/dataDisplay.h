@@ -1,15 +1,16 @@
 /**
- * @file    tareaEnvio.h
- * @brief   Cabecera con la declaración de las funciones para envío de datos
- * @par		Descripción de la función
- * @author  J. Barragán
+ * @file    dataDisplay.h
+ * @brief   Header de las funciones para el manejo de la pantalla
+ * @par		Descripción de funciones:
+ * 			En este fichero se declaran las funciones para poder escribir y leer sobre
+ * 			la variable privada que permiten comunicar las tareas de Lógica y Pantalla.
+ * @version 1.0
  * @author  F. Domínguez
- * @author  M. Etxebeste
- * @date    19/02/2015
+ * @date    20/05/2015
  */
 
-#ifndef TAREAENVIO_H_
-#define TAREAENVIO_H_
+#ifndef DATADISPLAY_H_
+#define DATADISPLAY_H_
 
 /*****************************************************
 *                   MODULES USED                     *
@@ -30,10 +31,12 @@
 /*****************************************************
 *                  EXPORTED FUNCTIONS                *
 *****************************************************/
-void APP_TAREAENVIO_init(void);
-void APP_TAREAENVIO_ejecutaTarea(void);
+
+void APP_DATA_DISPLAY_setIdPantalla(unsigned int nId);
+unsigned int APP_DATA_DISPLAY_getIdPantalla(void);
+
 /*****************************************************
 *                        EOF                         *
 *****************************************************/
 
-#endif /* TAREAENVIO_H_ */
+#endif /* DATADISPLAY_H_ */
