@@ -263,7 +263,7 @@ void APP_FUNCIONESLOGICA_A_setContador(unsigned int *cont, unsigned char nOperac
 		operador = 0;
 		break;
 	case SUMA :
-		operador = (operador+1) % (NUMBER_SENSORS+1);
+		operador = (operador+1) % (NUMBER_SENSORS);
 		break;
 	case RESTA :
 		if(*cont > 0)
@@ -305,7 +305,7 @@ void APP_FUNCIONESLOGICA_DO_protocoloEmergencia(){
 	/*
 	 * INSERTAR AQUÍ FUNCIÓN QUE LLAMA A RECOGER DATOS EMERGENCIA
 	 */
-	GPS_DATA gpsValues = {30,45,23.0,12,33,30.2};
+	GPS_DATA gpsValues = {30,45,12,33};
 	unsigned int BPM;
 	BPM = LIBS_PULSOMETRO_GetBPM();
 

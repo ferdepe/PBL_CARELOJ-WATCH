@@ -38,10 +38,10 @@
 typedef struct{
 	int north_degree;
 	int north_min;
-	float north_sec;
+	//float north_sec;
 	int south_degree;
 	int south_min;
-	float south_sec;
+	//float south_sec;
 }GPS_DATA;
 
 /**
