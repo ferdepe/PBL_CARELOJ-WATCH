@@ -75,6 +75,7 @@ void A_displayData(void);
 void A_displayReloj(void);
 void A_displayGet(void);
 void A_displayDataResult(void);
+void A_displayEmergency(void);
 void A_resetContador(void);
 
 //Para los eventos sin acción
