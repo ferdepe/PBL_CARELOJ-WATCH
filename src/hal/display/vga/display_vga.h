@@ -106,10 +106,11 @@ int DisplayDemoFroga();
 void displayTest(void);
 void displayChar(int x , int y , char kar);
 void displayMenu(void);
+void displayCorazon(int x0 , int y0);
 
 void displayTestCirc_Perimetro(int x0, int y0 , int r);
 void displayTestRect_Perimetro(int x0, int y0 , int width , int height);
-void displayTestRect(int x0, int y0 , int width , int height);
+void displayTestRect(int x0, int y0 , int width , int height, char letra);
 void displayTestCirc(int x0, int y0 , int r);
 float Q_rsqrt( float number );
 void display_borrar_buffer();

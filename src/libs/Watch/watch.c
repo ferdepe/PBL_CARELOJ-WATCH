@@ -92,18 +92,18 @@ void LIBS_WATCH_displayTime()
 		if(actualTime.hour > 12)
 		{
 			hora=actualTime.hour-12;
-			sprintf( strV, "%2d::%2d::%2d", hora, actualTime.min, actualTime.seg);
+			sprintf( strV, "%2d:%2d:%2d", hora, actualTime.min, actualTime.seg);
 			sprintf(strU, "PM");
 		}
 		else //(actualTime.hour<12)
 		{
-			sprintf( strV, "%2d::%2d::%2d", actualTime.hour, actualTime.min, actualTime.seg);
+			sprintf( strV, "%2d:%2d:%2d", actualTime.hour, actualTime.min, actualTime.seg);
 			sprintf(strU, "AM");
 		}
 	}
 	else
 		{
-			sprintf( strV, "%2d::%2d::%2d", actualTime.hour, actualTime.min, actualTime.seg);
+			sprintf( strV, "%2d:%2d:%2d", actualTime.hour, actualTime.min, actualTime.seg);
 			sprintf(strU, "\0");
 		}
 	//HAL_DISPLAY_screen(strT,strV,strU);
