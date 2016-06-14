@@ -30,19 +30,20 @@
 
 int main()
 {
-	HAL_GIC_SetupInterruptSystem();
-	APP_TAREAENVIO_init();
-	HAL_TIMER_TTC_TimerSetup(1);
-	HAL_GIC_EnableProcessorARMInterrupt();
+    HAL_GIC_SetupInterruptSystem();
+    APP_TAREAENVIO_init();
+    HAL_TIMER_TTC_TimerSetup(1);
+    HAL_GIC_EnableProcessorARMInterrupt();
     HAL_ADC_Init();
     HAL_DISPLAY_init();
     HAL_ACELEROMETRO_init();
 
 
     while(1){
-		APP_TAREALOGICA_ejecutaTarea();
-		APP_TAREAENVIO_ejecutaTarea();	    
-		APP_TAREAPANTALLA_ejecutaTarea();
+    	APP_TAREALOGICA_ejecutaTarea();
+	APP_TAREAENVIO_ejecutaTarea();	    
+	APP_TAREAPANTALLA_ejecutaTarea();
+
 	}
     return 0;
 }

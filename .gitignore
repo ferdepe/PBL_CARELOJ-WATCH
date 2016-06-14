@@ -1,5 +1,6 @@
-.project
 plantillaDoxygen.txt
 Debug
 .cproject
+.project
+Debug/
 src/lscript.ld
