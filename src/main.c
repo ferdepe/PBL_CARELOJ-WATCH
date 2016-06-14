@@ -31,7 +31,7 @@
 int main()
 {
 	HAL_GIC_SetupInterruptSystem();
-	///APP_TAREAENVIO_init();
+	APP_TAREAENVIO_init();
 	HAL_TIMER_TTC_TimerSetup(1);
 	HAL_GIC_EnableProcessorARMInterrupt();
     HAL_ADC_Init();
@@ -41,9 +41,8 @@ int main()
 
     while(1){
 		APP_TAREALOGICA_ejecutaTarea();
-	//	APP_TAREAENVIO_ejecutaTarea();
-	    APP_TAREAPANTALLA_ejecutaTarea();
-
+		APP_TAREAENVIO_ejecutaTarea();	    
+		APP_TAREAPANTALLA_ejecutaTarea();
 	}
     return 0;
 }
