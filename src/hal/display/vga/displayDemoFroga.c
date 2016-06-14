@@ -10,6 +10,7 @@
 #include "xil_cache.h"
 
 #include "font8x8.h"
+#include "font16x16.h"
 
 DisplayCtrl vgaCtrl;
 u32 vgaBuf[3][DISPLAYDEMO_MAX_FRAME];
@@ -22,17 +23,17 @@ void displayMenu()
 }
 
 int DisplayDemoFroga(){
-	displayInit();
-	//displayTest();
-	dibujar_linea(30);
-	dibujar_linea_vertical(130 , 0 , 30);
-	dibujar_linea_vertical(200 , 0 , 30);
-	displayTestRect(300, 10 , 50 , 30);
-	displayTestRect(300, 70 , 70 , 10);
-
-	displayTestCirc( 300, 300 , 30);
-
-	displayTestCirc_Perimetro( 400, 300 , 30);
+//	displayInit();
+//	//displayTest();
+//	dibujar_linea(30);
+//	dibujar_linea_vertical(130 , 0 , 30);
+//	dibujar_linea_vertical(200 , 0 , 30);
+//	displayTestRect(300, 10 , 50 , 30);
+//	displayTestRect(300, 70 , 70 , 10);
+//
+//	displayTestCirc( 300, 300 , 30);
+//
+//	displayTestCirc_Perimetro( 400, 300 , 30);
 
 	/*dibujar_linea_2_pto( 200, 200 , 250, 200 );
 	dibujar_linea_2_pto( 200, 220 , 300, 220 );
@@ -178,7 +179,7 @@ void displayBackground(){
 
 	fColor = 0.0;
 	wCurrentInt = 0b010;
-	for(xcoi = 3*width/8; xcoi < 5*width/8; xcoi++){
+	for(xcoi = 0.4*width; xcoi < 0.6*width; xcoi++){
 			/*if (wCurrentInt & 0b001)
 				fRed = fColor;
 			else
@@ -229,7 +230,20 @@ void displayBackground(){
 				wCurrentInt++;
 			}
 		}
-	displayTestCirc(vgaCtrl.vMode.width/2,vgaCtrl.vMode.height/2,100);//menu
+	dibujar_linea_vertical(0.4*width , 100 , 3);
+	dibujar_linea_vertical(0.6*width , 100 , 3);
+	displayTestCirc(320,240,100);//menu
+	displayTestCirc_Perimetro(vgaCtrl.vMode.width/2,vgaCtrl.vMode.height/2, 100);
+	displayTestCirc_Perimetro(vgaCtrl.vMode.width/2,vgaCtrl.vMode.height/2, 99);
+	displayTestCirc_Perimetro(vgaCtrl.vMode.width/2,vgaCtrl.vMode.height/2, 98);
+	displayCorazon(0,0);
+	displayTestRect(350, 300 , 25, 25,'B');
+	displayTestRect(350, 300 , 20 , 20,'N');
+	displayTestRect(290, 300 , 25, 25,'B');
+	displayTestRect(290, 300 , 20 , 20,'V');
+	displayTestRect(320, 300 , 25, 25,'B');
+	displayTestRect(320, 300 , 20 , 20,'R');
+	//displayTestCirc(320, 20 , 10);
 	//displayTestRect(vgaCtrl.vMode.width/2, vgaCtrl.vMode.height/2, 200 , 100);
 	/*
 	* Flush the framebuffer memory range to ensure changes are written to the
@@ -275,16 +289,16 @@ void dibujar_linea_vertical(int x , int y , int grosor){
 		xInt = width / 7; //Seven intervals, each with width/7 pixels
 		xInc = 256.0 / ((double) xInt); //256 color intensities per interval. Notice that overflow is handled for this pattern.
 
-		fBlue = 0.0;
+		fBlue = 255.0;
 		fRed = 255.0;
-		fGreen = 0.0;
+		fGreen = 255.0;
 	//	fColor = fBlue;
 		wCurrentInt = 1;
 		for(xcoi = x; xcoi < x+grosor ; xcoi++){
 			wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
 			iPixelAddr = xcoi;
 			for(ycoi = 0; ycoi < height; ycoi++){
-				vgaBuf[0][iPixelAddr] = wColor;
+				frameBuffer[iPixelAddr] = wColor;
 				/*
 				 * This pattern is printed one vertical line at a time, so the address must be incremented
 				 * by the stride instead of just 1.
@@ -298,11 +312,10 @@ void dibujar_linea_vertical(int x , int y , int grosor){
 		* Flush the framebuffer memory range to ensure changes are written to the
 		* actual memory, and therefore accessible by the VDMA.
 		*/
-		Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 4);
 
 }
 
-void displayTestRect(int x0, int y0 , int width , int height){
+void displayTestRect(int x0, int y0 , int width , int height, char letra){
 
 	int height_limit = 0;
 	int width_limit = 0;
@@ -318,9 +331,30 @@ void displayTestRect(int x0, int y0 , int width , int height){
 
 	wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
 
-	fBlue = 0.0;
-	fRed = 255.0;
-	fGreen = 0.0;
+	if (letra=='V')
+	{
+		fBlue = 0.0;
+		fRed = 0.0;
+		fGreen = 255.0;
+	}
+	else if (letra=='N')
+	{
+		fBlue = 0.0;
+		fRed = 0.0;
+		fGreen = 0.0;
+	}
+	else if(letra=='R')
+	{
+		fBlue = 0.0;
+		fRed = 255.0;
+		fGreen = 0.0;
+	}
+	else
+	{
+		fBlue = 255.0;
+		fRed = 255.0;
+		fGreen = 255.0;
+	}
 	//fColor = fBlue;
 
 	//comprobar los limites
@@ -330,14 +364,9 @@ void displayTestRect(int x0, int y0 , int width , int height){
 	for(y = y0-height/2; y < y0+height/2; y++){
 		for(x = x0-width/2; x < x0+width/2 ; x++){
 			iPixelAddr = x + (y*wStride);
-			vgaBuf[0][iPixelAddr] = wColor;
+			frameBuffer[iPixelAddr] = wColor;
 		}
 	}
-		/*
-	* Flush the framebuffer memory range to ensure changes are written to the
-	* actual memory, and therefore accessible by the VDMA.
-	*/
-	Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 3);
 
 }
 
@@ -511,9 +540,9 @@ void displayTestCirc_Perimetro(int x0, int y0 , int r){
 
 		wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
 
-		fBlue = 0.0;
+		fBlue = 255.0;
 		fRed = 255.0;
-		fGreen = 0.0;
+		fGreen = 255.0;
 		//fColor = fBlue;
 
 		//comprobar los limites
@@ -526,17 +555,17 @@ void displayTestCirc_Perimetro(int x0, int y0 , int r){
 			y = (int) ( sqrt( (r*r)- ((x-x0)*(x-x0))  ) );
 			//y = (int) ( Q_rsqrt( (r*r)- ((x-x0)*(x-x0))  ) );
 			iPixelAddr = x + ((y0+y)*wStride);
-			vgaBuf[0][iPixelAddr] = wColor;
+			frameBuffer[iPixelAddr] = wColor;
 			aux = y - yOldPos;
 			if ( aux> 1  ) {
 					for ( i = 1 ; i < aux ; i++ ){
 						iPixelAddr = x + ((y0-yOldPos-i)*wStride);
-						vgaBuf[0][iPixelAddr] = wColor;
+						frameBuffer[iPixelAddr] = wColor;
 					}
 			}else if (aux < 1){
 					for ( i = 1 ; i < (-aux) ; i++ ){
 						iPixelAddr = x + ((y0-yOldPos+i)*wStride);
-						vgaBuf[0][iPixelAddr] = wColor;
+						frameBuffer[iPixelAddr] = wColor;
 					}
 			}
 			yOldPos = y;
@@ -545,18 +574,18 @@ void displayTestCirc_Perimetro(int x0, int y0 , int r){
 			if ( aux < 1  ) {
 					for ( i = 1 ; i < (-aux) ; i++ ){
 						iPixelAddr = x + ( ( y0 - yOldNeg + i)*wStride);
-						vgaBuf[0][iPixelAddr] = wColor;
+						frameBuffer[iPixelAddr] = wColor;
 					}
 			}else if (aux > 1){
 				for ( i = 1 ; i < (aux) ; i++ ){
 					iPixelAddr = x + ((y0 - yOldNeg - i)*wStride);
-					vgaBuf[0][iPixelAddr] = wColor;
+					frameBuffer[iPixelAddr] = wColor;
 				}
 			}
 			yOldNeg = -y;
 
 			iPixelAddr = x + ((y0-y)*wStride);
-			vgaBuf[0][iPixelAddr] = wColor;
+			frameBuffer[iPixelAddr] = wColor;
 			//Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 4);
 		}
 			/*
@@ -578,8 +607,8 @@ void displayChar(int x0 , int y0 , char kar){
 		double fRed, fBlue, fGreen;
 		u32 x, y;
 		int i = 0;
-		char line = 0;
-		char auxByte = 0;
+		u16 line = 0;
+		u16 auxByte = 0;
 		char mask = 0x01;
 		//Inicializacion
 		height_limit = vgaCtrl.vMode.height;
@@ -591,22 +620,34 @@ void displayChar(int x0 , int y0 , char kar){
 		fGreen = 255.0;
 
 		//y0=height_limit/2;
-		x0=(width_limit/2)-x0;
+		x0=(vgaCtrl.vMode.width/2)-x0;
 		//comprobar los limites
 		//establecer el color
 		wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
 		//
-		for (i = 0 ; i < 8; i++){
-			line = font8x8_basic[(int)kar][i];
-			for(x = 0 ; x < 8; x++){
-				auxByte = line & (mask<<x);
-				if ( auxByte > 0){
-					iPixelAddr = (x0+x) +  (  (y0 + i ) * wStride ) ;
-					frameBuffer[iPixelAddr] = wColor;
-				}
-			}
-		}
+//		for (i = 0 ; i < 8; i++){
+//			line = font8x8_basic[(int)kar][i];
+//			for(x = 0 ; x < 8; x++){
+//				auxByte = line & (mask<<x);
+//				if ( auxByte > 0){
+//					iPixelAddr = (x0+x) +  (  (y0 + i ) * wStride ) ;
+//					frameBuffer[iPixelAddr] = wColor;
+//				}
+//			}
+//		}
+		for (i = 0 ; i < 32; i++){
 
+					line = font16x16_basic[(int)kar][i];
+					i++;
+					line = (line<<8)|font16x16_basic[(int)kar][i];
+					for(x = 0 ; x < 16; x++){
+						auxByte = line & (mask<<x);
+						if ( auxByte > 0){
+							iPixelAddr = (x0-x+16) +  (  ((y0 + i )/2) * wStride ) ;
+							frameBuffer[iPixelAddr] = wColor;
+						}
+					}
+				}
 				/*
 			* Flush the framebuffer memory range to ensure changes are written to the
 			* actual memory, and therefore accessible by the VDMA.
@@ -614,6 +655,55 @@ void displayChar(int x0 , int y0 , char kar){
 		//Xil_DCacheFlushRange( (unsigned int) vgaBuf, DISPLAYDEMO_MAX_FRAME * 1);
 
 
+}
+
+void displayCorazon(int x0 , int y0){
+
+		char array[32]={0x1C,0x38,0x22,0x44,0x41,0x82,0x80,0x01,0x80,0x05,0x80,0x09,0x80,0x11,0x88,0x21,0x44,0x42,0x42,0x82,0x21,0x04,0x10,0x08,0x08,0x10,0x04,0x20,0x02,0x40,0x01,0x80};
+		char array1[128]={0x03,0xf8,0x1f,0xc0,0x0c,0x04,0x20,0x30,0x30,0x02,0x40,0x0c,0x40,0x01,0x80,0x02,0x80,0x00,0x00,0x01,0x80,0x00,0x00,0x01,0x80,0x00,0x00,0x61,0x80,0x00,0x00,0xA1,0x80,0x00,0x01,0x41,0x80,0x00,0x02,0x81,0x80,0x00,0x05,0x01,0x80,0x30,0x0a,0x01,0x80,0x28,0x14,0x01,0x40,0x14,0x28,0x02,0x40,0x0a,0x50,0x02,0x40,0x05,0xa0,0x02,0x20,0x02,0x40,0x04,0x20,0x01,0x80,0x04,0x10,0x00,0x00,0x08,0x10,0x00,0x00,0x08,0x08,0x00,0x00,0x10,0x04,0x00,0x00,0x20,0x02,0x00,0x00,0x40,0x01,0x00,0x00,0x80,0x00,0x80,0x01,0x00,0x00,0x40,0x02,0x00,0x00,0x20,0x04,0x00,0x00,0x10,0x08,0x00,0x00,0x08,0x10,0x00,0x00,0x04,0x20,0x00,0x00,0x02,0x40,0x00,0x00,0x01,0x80,0x00};
+		char array2[128]={0x03,0xf8,0x1f,0xc0,0x0f,0xfc,0x3f,0xf0,0x3f,0xfe,0x7f,0xfc,0x7f,0xff,0xff,0xfe,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0x9f,0xff,0xff,0xff,0x1f,0xff,0xff,0xfe,0x3f,0xff,0xff,0xfc,0x7f,0xff,0xff,0xf8,0xff,0xff,0xcf,0xf1,0xff,0xff,0xc7,0xe3,0xff,0x7f,0xe3,0xc7,0xfe,0x7f,0xf1,0x8f,0xfe,0x7f,0xf8,0x1f,0xfe,0x3f,0xfc,0x3f,0xfc,0x3f,0xfe,0x7f,0xfc,0x1f,0xff,0xff,0xf8,0x1f,0xff,0xff,0xf8,0x0f,0xff,0xff,0xf0,0x07,0xff,0xff,0xe0,0x03,0xff,0xff,0xc0,0x01,0xff,0xff,0x80,0x00,0xff,0xff,0x00,0x00,0x7f,0xfe,0x00,0x00,0x3f,0xfc,0x00,0x00,0x1f,0xf8,0x00,0x00,0x0f,0xf0,0x00,0x00,0x07,0xe0,0x00,0x00,0x03,0xc0,0x00,0x00,0x01,0x80,0x00};
+		int height_limit = 0;
+		int width_limit = 0;
+		u32 wStride;
+		u32 iPixelAddr;
+		u32 wColor;
+		double fRed, fBlue, fGreen;
+		u32 x, y;
+		int i = 0;
+		u32 line = 0;
+		u32 auxByte = 0;
+		char mask = 0x01;
+		//Inicializacion
+		height_limit = vgaCtrl.vMode.height;
+		width_limit = vgaCtrl.vMode.width;
+		wStride = vgaCtrl.stride / 4; /* Find the stride in 32-bit words */
+		wStride = (vgaCtrl.stride) / 4; /* Find the stride in 32-bit words */
+		fBlue = 255.0;
+		fRed = 255.0;
+		fGreen = 255.0;
+
+		y0=(4*height_limit/2)-300;
+		x0=(width_limit/2)+15;
+		//comprobar los limites
+		//establecer el color
+		wColor = ((u32) fRed << BIT_DISPLAY_RED) | ((u32) fBlue << BIT_DISPLAY_BLUE) | ( (u32) fGreen << BIT_DISPLAY_GREEN);
+		for (i = 0 ; i < 128; i++){//32
+
+					line = array2[i];
+					i++;
+					line = (line<<8)|array2[i];
+					i++;
+					line = (line<<8)|array2[i];
+					i++;
+					line = (line<<8)|array2[i];
+					for(x = 0 ; x < 32; x++){//16
+						auxByte = line & (mask<<x);
+						if ( auxByte > 0){
+							iPixelAddr = (x0-x) +  (  ((y0 + i )/4) * wStride ) ;
+							frameBuffer[iPixelAddr] = wColor;
+						}
+					}
+				}
 }
 
 void escribirTablaAscii(){

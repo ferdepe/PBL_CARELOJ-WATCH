@@ -41,7 +41,7 @@ int main()
 
     while(1){
 		APP_TAREALOGICA_ejecutaTarea();
-		APP_TAREAENVIO_ejecutaTarea();
+	    APP_TAREAENVIO_ejecutaTarea();
 	    APP_TAREAPANTALLA_ejecutaTarea();
 
 	}

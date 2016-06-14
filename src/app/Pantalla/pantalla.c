@@ -44,7 +44,7 @@ void APP_PANTALLA_printValor(float valor);
 
 void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id);
 
-void APP_PANTALLA_printMensaje(char str[]);
+void APP_PANTALLA_printMensaje(char str[],char str1[]);
 
 /*****************************************************
 *                EXPORTED VARIABLES                  *
@@ -72,7 +72,7 @@ void APP_PANTALLA_mostrar()
 	if(Id==0) APP_PANTALLA_screenClock();
 	else if(Id<10) APP_PANTALLA_screenSensor(Id);
 	else if(Id>10) APP_PANTALLA_screenBanner(Id);
-	else APP_PANTALLA_printMensaje("Error");
+	else APP_PANTALLA_printMensaje("","Error");
 }
 /*****************************************************
 *                  LOCAL FUNCTIONS                   *
@@ -94,7 +94,7 @@ void APP_PANTALLA_screenClock()
 	T_TIME tiempo;
 	tiempo=LIBS_WATCH_getTime();
 	sprintf(strT, "TIEMPO\n");
-	sprintf(strV, "%2d::%2d::%2d", tiempo.hour, tiempo.min, tiempo.seg);
+	sprintf(strV, "%d:%i:%i", tiempo.hour, tiempo.min, tiempo.seg);
 	sprintf(strU, "\0");
 	HAL_DISPLAY_screen(strT,strV,strU);
 }
@@ -134,11 +134,11 @@ void APP_PANTALLA_screenSensor(unsigned int Id)
  */
 void APP_PANTALLA_screenBanner(unsigned int Id)
 {
-	if(Id==40)	APP_PANTALLA_printMensaje("Recogiendo Datos...");
-	else if(Id==41) APP_PANTALLA_printMensaje("Enviando Datos...");
-	else if(Id==42) APP_PANTALLA_printMensaje("Boton de panico ON");
-	else if(Id==43) APP_PANTALLA_printMensaje("Datos Recogidos");
-	else APP_PANTALLA_printMensaje("Error");
+	if(Id==40)	APP_PANTALLA_printMensaje("Recogiendo","Datos...");
+	else if(Id==41) APP_PANTALLA_printMensaje("Enviando","Datos...");
+	else if(Id==42) APP_PANTALLA_printMensaje("Boton de","Panico ON");
+	else if(Id==43) APP_PANTALLA_printMensaje("Datos","Recogidos");
+	else APP_PANTALLA_printMensaje("","Error");
 }
 
 /**
@@ -174,7 +174,7 @@ void APP_PANTALLA_printTipo(CONFIG_SENSORS Id)
  */
 void APP_PANTALLA_printValor(float valor)
 {
-	sprintf(strV,"%f",valor);
+	sprintf(strV,"%.2f",valor);
 }
 
 /**
@@ -201,12 +201,13 @@ void APP_PANTALLA_printUnidad(CONFIG_SENSORS Id)
  * @par		   Descripción de la función:
  * 			   Función encargada de reproducir en el
  * 			   display mensajes y que se reproducirá en pantalla.
- * @param[in]  char str[], cadena de caracteres del mensaje.
+ * @param[in]  char str[], cadena de caracteres del primer renglón del mensaje.
+ * @param[in]  char str1[], cadena de caracteres del segundo renglón del mensaje.
  * @param[out] void
  * @author     Javier Barragán
  * @date       24/05/2016
  */
-void APP_PANTALLA_printMensaje(char str[])
+void APP_PANTALLA_printMensaje(char str[],char str1[])
 {
-	HAL_DISPLAY_screen("",str,"");
+	HAL_DISPLAY_screen(str,str1,"");
 }
