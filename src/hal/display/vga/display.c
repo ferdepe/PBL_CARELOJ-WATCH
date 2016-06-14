@@ -69,18 +69,17 @@ void HAL_DISPLAY_screen(char strT[], char strV[], char strU[])
 void HAL_DISPLAY_printString(char str[], char tipo)
 {
 	int	 i, y, x0;
-	if (tipo=='T' ) y = 230;//titulo
-	if (tipo=='V' ) y = 240;//valor
-	if (tipo=='U' ) y = 250;//unidad
-	x0=((strlen(str))/2)*10;
-		//borrarFrameBuffer();
-		//displayMenu();
+	if (tipo=='T' ) y = 440;//titulo
+	if (tipo=='V' ) y = 480;//valor
+	if (tipo=='U' ) y = 520;//unidad
+//	if (tipo=='T' ) y = 230;//titulo
+//	if (tipo=='V' ) y = 240;//valor
+//	if (tipo=='U' ) y = 250;//unidad
+	x0=((strlen(str))/2);
 	for( i=0; i<strlen(str); i++)
 	{
-		displayChar(x0-10*i, y , str[i]);
+		displayChar((x0-i)*16, y , str[i]);
 	}
-	//copiarFrameBuffer();
-	//updateFrame();
 }
 
 void HAL_DISPLAY_printData(float str[], double fRed, double fGreen, double fBlue)
