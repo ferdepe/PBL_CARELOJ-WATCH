@@ -1,6 +1,11 @@
+<<<<<<< HEAD
+.project
 plantillaDoxygen.txt
 Debug
 .cproject
+=======
+.cproject
 .project
 Debug/
+>>>>>>> PBLdev
 src/lscript.ld

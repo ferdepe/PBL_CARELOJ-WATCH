@@ -31,14 +31,14 @@
 *               DEFINITIONS AND MACROS               *
 *****************************************************/
 ESTADO(idle)
-	ITEM_EAC(EMERGENCIA, E_UsuarioSeCae, NULL),
-	ITEM_EAC(EMERGENCIA, E_BotonEmergenciaPulsado, NULL),
+	ITEM_EAC(EMERGENCIA, E_UsuarioSeCae, A_displayEmergency),
+	ITEM_EAC(EMERGENCIA, E_BotonEmergenciaPulsado, A_displayEmergency),
 	ITEM_EAC(MOSTRANDO_DATOS, E_BotonDisplayPulsado, A_displayData),
 	ITEM_EAC(RECOGIENDO_DATOS, E_BotonRecogidaPulsado, A_displayGet)
 FIN_ESTADO(idle,IDLE, ESTADO_idle_do)
 
 ESTADO(emergencia)
-	ITEM_EAC(IDLE, E_AvisoEnBuffer, NULL)
+	ITEM_EAC(IDLE, E_AvisoEnBuffer, A_displayReloj)
 FIN_ESTADO(emergencia,EMERGENCIA,ESTADO_emergencia_do)
 
 ESTADO(mostrando_datos)
@@ -51,8 +51,8 @@ FIN_ESTADO(mostrando_datos,MOSTRANDO_DATOS,ESTADO_mostrando_datos_do)
 
 ESTADO(recogiendo_datos)
 	ITEM_EAC(MOSTRANDO_DATOS, E_FinRecogida, A_displayDataResult),
-	ITEM_EAC(EMERGENCIA, E_UsuarioSeCae, NULL),
-	ITEM_EAC(EMERGENCIA, E_BotonEmergenciaPulsado, NULL)
+	ITEM_EAC(EMERGENCIA, E_UsuarioSeCae, A_displayEmergency),
+	ITEM_EAC(EMERGENCIA, E_BotonEmergenciaPulsado, A_displayEmergency)
 FIN_ESTADO(recogiendo_datos,RECOGIENDO_DATOS,ESTADO_recogiendo_datos_do)
 
 AUTOMATA(careloj)
@@ -302,6 +302,17 @@ void A_displayDataResult(void){
 }
 
 /**
+ * @fn      A_displayEmergency(void)
+ * @brief   Acción que llama a mostrar por pantalla que la solicitud de emergencia está siendo procesada.
+ * @par		Descripción de la función:
+ * @author  F. Domínguez
+ * @date    14/06/2016
+*/
+void A_displayEmergency(void){
+	APP_FUNCIONESLOGICA_A_displayPantalla(42);
+}
+
+/**
  * @fn      A_resetContador(void)
  * @brief   Acción que resetea \link contPantallaMedida \endlink.
  * @par		Descripción de la función:
@@ -312,6 +323,7 @@ void A_displayDataResult(void){
 */
 void A_resetContador(void){
 	APP_FUNCIONESLOGICA_A_setContador(&contPantallaMedida, RESET);
+	APP_FUNCIONESLOGICA_A_displayPantalla(42);
 }
 
 /***                 DO ESTADOS                   ***/
